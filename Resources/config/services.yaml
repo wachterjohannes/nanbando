@@ -1,0 +1,4 @@
+services:
+    Nanbando\Host\HostRegistry:
+        class: Nanbando\Host\HostRegistry
+        public: true
