@@ -15,6 +15,11 @@ class Host implements HostInterface
     private $hostName;
 
     /**
+     * @var int
+     */
+    private $port = 22;
+
+    /**
      * @var string
      */
     private $directory;
@@ -40,7 +45,19 @@ class Host implements HostInterface
         return $this->hostName;
     }
 
-    public function getDirectory(): string
+    public function getPort(): int
+    {
+        return $this->port;
+    }
+
+    public function setPort(int $port): HostInterface
+    {
+        $this->port = $port;
+
+        return $this;
+    }
+
+    public function getDirectory(): ?string
     {
         return $this->directory;
     }
@@ -52,7 +69,7 @@ class Host implements HostInterface
         return $this;
     }
 
-    public function getUser(): string
+    public function getUser(): ?string
     {
         return $this->user;
     }

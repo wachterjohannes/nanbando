@@ -7,7 +7,7 @@ class HostRegistry
     /**
      * @var HostInterface[]
      */
-    private $hosts;
+    private $hosts = [];
 
     public function register(HostInterface $host): self
     {

@@ -8,6 +8,7 @@ use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class Nanbando
@@ -36,6 +37,11 @@ class Nanbando
      */
     private $container;
 
+    /**
+     * @var ParameterBag
+     */
+    private $parameterBag;
+
     public function __construct()
     {
         $this->container = new ContainerBuilder();
@@ -57,11 +63,20 @@ class Nanbando
 
     public function getParameterBag(): ParameterBag
     {
-        return $this->container->getParameterBag();
+        if (!$this->container->isCompiled()) {
+            return $this->container->getParameterBag();
+        }
+
+        return $this->parameterBag;
     }
 
     public function getService(string $id)
     {
+        if (!$this->container->isCompiled()) {
+            $this->container->compile();
+            $this->parameterBag = new EnvPlaceholderParameterBag($this->container->getParameterBag()->all());
+        }
+
         return $this->container->get($id);
     }
 }

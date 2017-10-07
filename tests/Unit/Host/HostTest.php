@@ -36,4 +36,19 @@ class HostTest extends TestCase
         $this->assertEquals($host, $host->setDirectory('/var/www/asapo.at'));
         $this->assertEquals('/var/www/asapo.at', $host->getDirectory());
     }
+
+    public function testPort()
+    {
+        $host = new Host('asapo', 'asapo.at');
+
+        $this->assertEquals($host, $host->setPort(222));
+        $this->assertEquals(222, $host->getPort());
+    }
+
+    public function testPortDefault()
+    {
+        $host = new Host('asapo', 'asapo.at');
+
+        $this->assertEquals(22, $host->getPort());
+    }
 }

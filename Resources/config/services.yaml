@@ -1,4 +1,11 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
     Nanbando\Host\HostRegistry:
         class: Nanbando\Host\HostRegistry
-        public: true
+    Nanbando\Client\ClientFactory:
+        class: Nanbando\Client\ClientFactory
+    Nanbando\Process\ProcessFactory:
+        class: Nanbando\Process\ProcessFactory

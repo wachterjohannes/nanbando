@@ -23,4 +23,18 @@ class HostTest extends TestCase
 
         $this->assertEquals($host, $hostRegistry->get('asapo'));
     }
+
+    public function testHostNameOnly()
+    {
+        $host = host('asapo.at');
+
+        $this->assertInstanceOf(HostInterface::class, $host);
+        $this->assertEquals('asapo.at', $host->getName());
+        $this->assertEquals('asapo.at', $host->getHostName());
+
+        /** @var HostRegistry $hostRegistry */
+        $hostRegistry = Nanbando::get()->getService(HostRegistry::class);
+
+        $this->assertEquals($host, $hostRegistry->get('asapo.at'));
+    }
 }
