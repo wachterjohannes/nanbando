@@ -11,3 +11,15 @@ services:
         class: Nanbando\Process\ProcessFactory
     Nanbando\Task\TaskRegistry:
         class: Nanbando\Task\TaskRegistry
+    Nanbando\Console\TaskCommandFactory:
+        class: Nanbando\Console\TaskCommandFactory
+
+    # Symfony console
+    Symfony\Component\Console\Input\ArgvInput:
+        class: Symfony\Component\Console\Input\ArgvInput
+    Symfony\Component\Console\Output\ConsoleOutput:
+        class: Symfony\Component\Console\Output\ConsoleOutput
+    Symfony\Component\Console\Output\OutputInterface:
+        alias: Symfony\Component\Console\Output\ConsoleOutput
+    Symfony\Component\Console\Input\InputInterface:
+        alias: Symfony\Component\Console\Input\ArgvInput

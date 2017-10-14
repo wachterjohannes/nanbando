@@ -2,6 +2,9 @@
 
 namespace Nanbando;
 
+use Nanbando\Console\Application;
+use Nanbando\Console\TaskCommandFactory;
+use Nanbando\Task\TaskRegistry;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -78,5 +81,20 @@ class Nanbando
         }
 
         return $this->container->get($id);
+    }
+
+    public function boot()
+    {
+        $taskCommandFactory = $this->getService(TaskCommandFactory::class);
+
+        $commands = [];
+        foreach ($this->getService(TaskRegistry::class)->getTasks() as $name => $task) {
+            $commands[] = $taskCommandFactory->create($name, $task);
+        }
+
+        $application = new Application('Nanbando');
+        $application->addCommands($commands);
+
+        return $application;
     }
 }
