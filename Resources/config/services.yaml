@@ -9,3 +9,5 @@ services:
         class: Nanbando\Client\ClientFactory
     Nanbando\Process\ProcessFactory:
         class: Nanbando\Process\ProcessFactory
+    Nanbando\Task\TaskRegistry:
+        class: Nanbando\Task\TaskRegistry

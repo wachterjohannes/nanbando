@@ -1,6 +1,6 @@
 <?php
 
-namespace Nanbando\Tests\Recipes\Basic;
+namespace Nanbando\Tests\Recipes\Connection;
 
 use Nanbando\Tests\TestCase;
 use function Nanbando\host;
