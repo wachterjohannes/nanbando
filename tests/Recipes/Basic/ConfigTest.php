@@ -2,13 +2,13 @@
 
 namespace Nanbando\Tests\Recipes\Basic;
 
-use function Nanbando\get;
 use Nanbando\Nanbando;
-use function Nanbando\set;
 use Nanbando\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use function Nanbando\get;
 use function Nanbando\import;
 use function Nanbando\parameters;
+use function Nanbando\set;
 
 class ConfigTest extends TestCase
 {
@@ -36,18 +36,16 @@ class ConfigTest extends TestCase
     public function testGet()
     {
         $parameterBag = Nanbando::get()->getParameterBag();
-        set('test-get', '123');
+        $parameterBag->set('test-get', '123');
 
-        $this->assertEquals('123', $parameterBag->get('test-get'));
+        $this->assertEquals('123', get('test-get'));
     }
 
-    public function testGetDefaultNull()
+    public function testGetResolve()
     {
-        $this->assertNull(get('test-get-default'));
-    }
+        $parameterBag = Nanbando::get()->getParameterBag();
+        $parameterBag->set('test-get', '123');
 
-    public function testGetDefault()
-    {
-        $this->assertEquals('123', get('test-get-default', '123'));
+        $this->assertEquals('123/test', get('%test-get%/test'));
     }
 }

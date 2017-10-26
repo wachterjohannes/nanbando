@@ -3,7 +3,7 @@
 namespace Nanbando\Tests\Unit\Process;
 
 use Nanbando\Process\ProcessFactory;
-use Nanbando\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 
 class ProcessFactoryTest extends TestCase

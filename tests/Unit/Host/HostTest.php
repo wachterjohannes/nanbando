@@ -3,7 +3,7 @@
 namespace Nanbando\Tests\Unit\Host;
 
 use Nanbando\Host\Host;
-use Nanbando\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class HostTest extends TestCase
 {
@@ -50,5 +50,19 @@ class HostTest extends TestCase
         $host = new Host('asapo', 'asapo.at');
 
         $this->assertEquals(22, $host->getPort());
+    }
+
+    public function testIsLocalhost()
+    {
+        $host = new Host('localhost', 'localhost');
+
+        $this->assertTrue($host->isLocalhost());
+    }
+
+    public function testIsNotLocalhost()
+    {
+        $host = new Host('asapo', 'asapo.at');
+
+        $this->assertFalse($host->isLocalhost());
     }
 }

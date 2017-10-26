@@ -30,6 +30,16 @@ class Task implements TaskInterface
         $this->parameter = $parameter;
     }
 
+    public function getCallable(): callable
+    {
+        return $this->callable;
+    }
+
+    public function getParameter(): array
+    {
+        return $this->parameter;
+    }
+
     public function setParameter(array $parameter): TaskInterface
     {
         $this->parameter = $parameter;

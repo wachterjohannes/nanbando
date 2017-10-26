@@ -3,7 +3,7 @@
 namespace Nanbando\Tests\Unit\Task;
 
 use Nanbando\Task\Task;
-use Nanbando\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class TaskTest extends TestCase
 {
@@ -106,5 +106,28 @@ class TaskTest extends TestCase
 
         $this->assertEquals(1, $task->invoke());
         $this->assertTrue($x);
+    }
+
+    public function testGetCallable()
+    {
+        $callable = function () {
+            return 1;
+        };
+
+        $task = new Task($callable);
+
+        $this->assertEquals($callable, $task->getCallable());
+    }
+
+    public function testGetParameter()
+    {
+        $task = new Task(
+            function () {
+                return 1;
+            },
+            [1]
+        );
+
+        $this->assertEquals([1], $task->getParameter());
     }
 }

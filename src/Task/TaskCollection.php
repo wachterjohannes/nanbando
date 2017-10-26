@@ -21,6 +21,11 @@ class TaskCollection extends Task implements TaskInterface
         return $this;
     }
 
+    public function getTasks(): array
+    {
+        return $this->tasks;
+    }
+
     public function beforeAll(callable $callable, array $parameter = []): self
     {
         foreach ($this->tasks as $name => $task) {

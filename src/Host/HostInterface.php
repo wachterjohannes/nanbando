@@ -16,4 +16,6 @@ interface HostInterface
 
     public function getUser(): ?string;
     public function setUser(string $user): self;
+
+    public function isLocalhost(): bool;
 }

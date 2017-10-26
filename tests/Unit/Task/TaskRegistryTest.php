@@ -4,7 +4,7 @@ namespace Nanbando\Tests\Unit\Task;
 
 use Nanbando\Task\TaskInterface;
 use Nanbando\Task\TaskRegistry;
-use Nanbando\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class TaskRegistryTest extends TestCase
 {

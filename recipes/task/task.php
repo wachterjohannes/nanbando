@@ -8,7 +8,14 @@ use Nanbando\Task\TaskRegistry;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-function registerTask(string $name, callable $callable): TaskInterface
+function task(string $name, callable $callable): TaskInterface
+{
+    $task = new Task($callable);
+
+    return registerTask($name, $task);
+}
+
+function registerTask(string $name, TaskInterface $task)
 {
     $nanbando = Nanbando::get();
 
@@ -18,7 +25,8 @@ function registerTask(string $name, callable $callable): TaskInterface
     $input = $nanbando->getService(InputInterface::class);
     $output = $nanbando->getService(OutputInterface::class);
 
-    $task = new Task($callable, [$input, $output]);
+    $task->setParameter([$input, $output]);
+
     $taskRegistry->register($name, $task);
 
     return $task;

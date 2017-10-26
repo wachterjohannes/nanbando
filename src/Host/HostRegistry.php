@@ -9,6 +9,11 @@ class HostRegistry
      */
     private $hosts = [];
 
+    public function __construct()
+    {
+        $this->hosts['localhost'] = new Localhost();
+    }
+
     public function register(HostInterface $host): self
     {
         $this->hosts[$host->getName()] = $host;

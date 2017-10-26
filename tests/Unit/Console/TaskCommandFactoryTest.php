@@ -5,7 +5,7 @@ namespace Nanbando\Tests\Unit\Console;
 use Nanbando\Console\TaskCommand;
 use Nanbando\Console\TaskCommandFactory;
 use Nanbando\Task\TaskInterface;
-use Nanbando\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class TaskCommandFactoryTest extends TestCase
 {

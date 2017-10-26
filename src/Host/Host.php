@@ -80,4 +80,9 @@ class Host implements HostInterface
 
         return $this;
     }
+
+    public function isLocalhost(): bool
+    {
+        return $this->name === 'localhost';
+    }
 }

@@ -32,8 +32,13 @@ class SshClient implements ClientInterface
         $this->timeout = $timeout;
     }
 
-    public function run(string $command, array $config = [])
+    public function run(string $command, array $config = []): string
     {
+        $workingDirectory = $this->host->getDirectory();
+        if ($workingDirectory) {
+            $command = sprintf('cd %s; %s', $workingDirectory, $command);
+        }
+
         $config = array_merge(['tty' => true], $config);
 
         $fullHost = ($this->host->getUser() ? $this->host->getUser() . '@' : '') . $this->host->getHostname();

@@ -4,7 +4,7 @@ namespace Nanbando\Tests\Unit\Client;
 
 use Nanbando\Client\SshArguments;
 use Nanbando\Host\Host;
-use Nanbando\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Inspired by deployer/deployer.

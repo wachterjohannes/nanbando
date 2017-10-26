@@ -3,6 +3,8 @@ services:
         autowire: true
         autoconfigure: true
         public: true
+    Nanbando\Console\Application:
+        class: Nanbando\Console\Application
     Nanbando\Host\HostRegistry:
         class: Nanbando\Host\HostRegistry
     Nanbando\Client\ClientFactory:
@@ -13,6 +15,10 @@ services:
         class: Nanbando\Task\TaskRegistry
     Nanbando\Console\TaskCommandFactory:
         class: Nanbando\Console\TaskCommandFactory
+
+    # Backup
+    Nanbando\Backup\BackupTaskCollection:
+        class: Nanbando\Backup\BackupTaskCollection
 
     # Symfony console
     Symfony\Component\Console\Input\ArgvInput:

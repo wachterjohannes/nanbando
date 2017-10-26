@@ -7,7 +7,7 @@ use Nanbando\Client\ClientInterface;
 use Nanbando\Client\SshClient;
 use Nanbando\Host\HostInterface;
 use Nanbando\Process\ProcessFactory;
-use Nanbando\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ClientFactoryTest extends TestCase
 {

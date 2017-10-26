@@ -3,18 +3,18 @@
 namespace Nanbando;
 
 use Nanbando\Client\ClientFactory;
+use Nanbando\Console\Application;
 use Nanbando\Host\HostInterface;
 
 function run(string $command, array $config = [], HostInterface $host = null): string
 {
+    $nanbando = Nanbando::get();
     if (!$host) {
-        // TODO host from context
-
-        return '';
+        $host = $nanbando->getService(Application::class)->getHost();
     }
 
     /** @var ClientFactory $clientFactory */
-    $clientFactory = Nanbando::get()->getService(ClientFactory::class);
+    $clientFactory = $nanbando->getService(ClientFactory::class);
 
     $client = $clientFactory->create($host);
 

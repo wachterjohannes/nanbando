@@ -20,12 +20,13 @@ function set(string $name, $value): void
     $parameterBag->set($name, $value);
 }
 
-function get(string $name, $default = null)
+function get(string $name)
 {
     $parameterBag = parameters();
-    if (!$parameterBag->has($name)) {
-        return $default;
+
+    if ($parameterBag->has($name)) {
+        return $parameterBag->get($name);
     }
 
-    return $parameterBag->get($name);
+ return $parameterBag->resolveString($name);
 }

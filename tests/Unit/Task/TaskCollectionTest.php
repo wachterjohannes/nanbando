@@ -4,7 +4,7 @@ namespace Nanbando\Tests\Unit\Task;
 
 use Nanbando\Task\TaskCollection;
 use Nanbando\Task\TaskInterface;
-use Nanbando\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class TaskCollectionTest extends TestCase
 {
@@ -70,5 +70,15 @@ class TaskCollectionTest extends TestCase
         $task->after($callable, [1, 'test', $task->reveal()])->shouldBeCalled()->willReturn($task->reveal());
 
         $this->assertEquals($taskCollection, $taskCollection->afterAll($callable, [1]));
+    }
+
+    public function testGetTasks()
+    {
+        $task = $this->prophesize(TaskInterface::class);
+
+        $taskCollection = new TaskCollection();
+        $taskCollection->register('test', $task->reveal());
+
+        $this->assertEquals(['test' => $task->reveal()], $taskCollection->getTasks());
     }
 }
