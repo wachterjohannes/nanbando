@@ -17,6 +17,8 @@ services:
         class: Nanbando\Console\TaskCommandFactory
 
     # Backup
+    Nanbando\Filesystem\FilesystemFactory:
+        class: Nanbando\Filesystem\FilesystemFactory
     Nanbando\Backup\BackupTaskCollection:
         class: Nanbando\Backup\BackupTaskCollection
 

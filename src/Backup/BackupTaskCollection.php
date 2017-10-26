@@ -37,19 +37,25 @@ class BackupTaskCollection extends TaskCollection
         $this->beforeAll(
             function (string $name, Task $task) {
                 $this->context = $this->context->open($name);
+                $this->context->set('start', new \DateTime());
                 $task->setParameter(array_merge([$this->context], $task->getParameter()));
             }
         );
 
         $this->afterAll(
             function () {
+                $this->context->set('end', new \DateTime());
                 $this->context = $this->context->close();
             }
         );
+
+        $this->context->set('start', new \DateTime());
     }
 
     public function finish()
     {
+        $this->context->set('end', new \DateTime());
+
         $this->context = $this->context->close();
     }
 }

@@ -3,7 +3,6 @@
 namespace Nanbando\Backup\Context;
 
 use Nanbando\Filesystem\FilesystemInterface;
-use Nanbando\Filesystem\PrefixedFilesystem;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class BackupContext
@@ -61,16 +60,13 @@ class BackupContext
 
     public function open(string $name): self
     {
-        return new self(
-            new PrefixedFilesystem($this->filesystem, $this->prefixName($name, '/')),
-            $this->prefixName($name),
-            $this
-        );
+        return new self($this->filesystem->decorate($this->prefixName($name, '/')), $this->prefixName($name), $this);
     }
 
     public function close(): ?self
     {
         if (!$this->parent) {
+            $this->filesystem->addContent(json_encode($this->parameterBag->all(), JSON_PRETTY_PRINT), 'database.json');
             $this->filesystem->close();
 
             return null;

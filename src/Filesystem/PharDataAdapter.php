@@ -2,7 +2,7 @@
 
 namespace Nanbando\Filesystem;
 
-class PharDataFilesystem implements FilesystemInterface
+class PharDataAdapter implements FilesystemAdapterInterface
 {
     /**
      * @var \PharData
@@ -20,7 +20,7 @@ class PharDataFilesystem implements FilesystemInterface
         $this->filename = $filename;
     }
 
-    public function addFile(string $file, string $localName): FilesystemInterface
+    public function addFile(string $file, string $localName): FilesystemAdapterInterface
     {
         $this->pharData->addFile($file, $localName);
 

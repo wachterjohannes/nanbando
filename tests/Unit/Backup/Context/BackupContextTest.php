@@ -4,7 +4,6 @@ namespace Nanbando\Tests\Unit\Backup\Context;
 
 use Nanbando\Backup\Context\BackupContext;
 use Nanbando\Filesystem\FilesystemInterface;
-use Nanbando\Filesystem\PrefixedFilesystem;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -48,32 +47,38 @@ class BackupContextTest extends TestCase
     public function testOpen()
     {
         $filesystem = $this->prophesize(FilesystemInterface::class);
+        $filesystemDecorator = $this->prophesize(FilesystemInterface::class);
+
+        $filesystem->decorate('layer-2')->willReturn($filesystemDecorator->reveal());
 
         $context = new BackupContext($filesystem->reveal());
 
         $context2 = $context->open('layer-2');
         $this->assertInstanceOf(BackupContext::class, $context2);
         $this->assertEquals('layer-2', $context2->getName());
-        $this->assertInstanceOf(PrefixedFilesystem::class, $context2->getFilesystem());
-        $this->assertEquals('layer-2', $context2->getFilesystem()->getPrefix());
+        $this->assertEquals($filesystemDecorator->reveal(), $context2->getFilesystem());
     }
 
     public function testNamedOpen()
     {
         $filesystem = $this->prophesize(FilesystemInterface::class);
+        $filesystemDecorator = $this->prophesize(FilesystemInterface::class);
+
+        $filesystem->decorate('layer-1/layer-2')->willReturn($filesystemDecorator->reveal());
 
         $context = new BackupContext($filesystem->reveal(), 'layer-1');
 
         $context2 = $context->open('layer-2');
         $this->assertInstanceOf(BackupContext::class, $context2);
         $this->assertEquals('layer-1.layer-2', $context2->getName());
-        $this->assertInstanceOf(PrefixedFilesystem::class, $context2->getFilesystem());
-        $this->assertEquals('layer-1/layer-2', $context2->getFilesystem()->getPrefix());
+        $this->assertEquals($filesystemDecorator->reveal(), $context2->getFilesystem());
     }
 
     public function testClose()
     {
         $filesystem = $this->prophesize(FilesystemInterface::class);
+        $filesystem->addContent(Argument::type('string'), 'database.json');
+        $filesystem->close()->shouldBeCalled();
 
         $context = new BackupContext($filesystem->reveal());
 

@@ -6,8 +6,9 @@ use Nanbando\Backup\Context\BackupContext;
 use Nanbando\Filesystem\FilesystemInterface;
 use Nanbando\Plugin\DirectoryPlugin;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Prophecy\Argument;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\NullOutput;
 use Webmozart\PathUtil\Path;
 
 class DirectoryPluginTest extends TestCase
@@ -31,11 +32,9 @@ class DirectoryPluginTest extends TestCase
                 ->willReturn($filesystem->reveal());
         }
 
+        $context->set('metadata', Argument::type('array'))->shouldBeCalled();
+
         $plugin = new DirectoryPlugin($dirname);
-        $plugin->backup(
-            $context->reveal(),
-            $this->prophesize(InputInterface::class)->reveal(),
-            $this->prophesize(OutputInterface::class)->reveal()
-        );
+        $plugin->backup($context->reveal(), new ArgvInput(), new NullOutput());
     }
 }

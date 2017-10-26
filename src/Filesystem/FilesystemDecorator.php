@@ -4,7 +4,7 @@ namespace Nanbando\Filesystem;
 
 use Webmozart\PathUtil\Path;
 
-class PrefixedFilesystem implements FilesystemInterface
+class FilesystemDecorator implements FilesystemInterface
 {
     /**
      * @var FilesystemInterface
@@ -27,9 +27,28 @@ class PrefixedFilesystem implements FilesystemInterface
         return $this->prefix;
     }
 
+    public function decorate(string $prefix): FilesystemInterface
+    {
+        return $this->filesystem->decorate($prefix);
+    }
+
+    public function tempFilename(): string
+    {
+        return $this->filesystem->tempFilename();
+    }
+
     public function addFile(string $file, string $localName): FilesystemInterface
     {
-        return $this->filesystem->addFile($file, Path::join([$this->prefix, $localName]));
+        $this->filesystem->addFile($file, Path::join([$this->prefix, $localName]));
+
+        return $this;
+    }
+
+    public function addContent(string $content, string $localName): FilesystemInterface
+    {
+        $this->filesystem->addContent($content, Path::join([$this->prefix, $localName]));
+
+        return $this;
     }
 
     public function close(): void

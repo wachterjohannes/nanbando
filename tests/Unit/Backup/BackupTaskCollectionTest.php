@@ -18,6 +18,9 @@ class BackupTaskCollectionTest extends TestCase
         $filesystemFactory = $this->prophesize(FilesystemFactory::class);
         $filesystemFactory->create()->willReturn($filesystem->reveal());
 
+        $filesystem->addContent(Argument::cetera())->shouldBeCalled();
+        $filesystem->close()->shouldBeCalled();
+
         $task = $this->prophesize(TaskInterface::class);
         $task->getParameter()->willReturn([]);
         $task->setParameter(

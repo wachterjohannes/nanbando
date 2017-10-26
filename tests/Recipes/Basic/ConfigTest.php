@@ -33,6 +33,15 @@ class ConfigTest extends TestCase
         $this->assertEquals('123', $parameterBag->get('test-set'));
     }
 
+    public function testSetOtherParameter()
+    {
+        set('test-set1', '123');
+        set('test-set2', '%test-set1%123');
+
+        $parameterBag = Nanbando::get()->getParameterBag();
+        $this->assertEquals('123123', $parameterBag->get('test-set2'));
+    }
+
     public function testGet()
     {
         $parameterBag = Nanbando::get()->getParameterBag();

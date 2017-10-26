@@ -17,7 +17,7 @@ function parameters(): ParameterBag
 function set(string $name, $value): void
 {
     $parameterBag = parameters();
-    $parameterBag->set($name, $value);
+    $parameterBag->set($name, !is_string($value) ? $value : $parameterBag->resolveString($value));
 }
 
 function get(string $name)
@@ -28,5 +28,5 @@ function get(string $name)
         return $parameterBag->get($name);
     }
 
- return $parameterBag->resolveString($name);
+    return $parameterBag->resolveString($name);
 }
