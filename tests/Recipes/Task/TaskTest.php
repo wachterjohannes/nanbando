@@ -3,13 +3,13 @@
 namespace Nanbando\Tests\Recipes\Task;
 
 use Nanbando\Nanbando;
-use function Nanbando\registerTask;
 use Nanbando\Task\TaskInterface;
 use Nanbando\Task\TaskRegistry;
 use Nanbando\Tests\TestCase;
-use function Nanbando\task;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use function Nanbando\registerTask;
+use function Nanbando\task;
 
 class TaskTest extends TestCase
 {

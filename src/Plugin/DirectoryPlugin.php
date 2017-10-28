@@ -12,7 +12,7 @@ class DirectoryPlugin implements PluginInterface
 {
     public static function create(string $directory): self
     {
-        return new DirectoryPlugin($directory);
+        return new self($directory);
     }
 
     /**

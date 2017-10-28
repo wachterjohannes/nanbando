@@ -21,7 +21,7 @@ class Nanbando
     public static function get(): self
     {
         if (!self::$instance) {
-            return self::$instance = new Nanbando();
+            return self::$instance = new self();
         }
 
         return self::$instance;

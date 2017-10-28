@@ -11,12 +11,12 @@ class MysqlDumpPlugin implements PluginInterface
 {
     public static function create(string $host, string $userName, string $database): self
     {
-        return new MysqlDumpPlugin();
+        return new self();
     }
 
     public static function autoConfigure(ParameterBag $parameter): self
     {
-        return new MysqlDumpPlugin();
+        return new self();
     }
 
     public function backup(BackupContext $context, InputInterface $input, OutputInterface $output)

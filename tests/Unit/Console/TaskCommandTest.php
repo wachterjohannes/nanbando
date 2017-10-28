@@ -6,11 +6,11 @@ use Nanbando\Console\Application;
 use Nanbando\Console\TaskCommand;
 use Nanbando\Host\Localhost;
 use Nanbando\Task\TaskInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use PHPUnit\Framework\TestCase;
 
 class TaskCommandTest extends TestCase
 {

@@ -1,0 +1,32 @@
+language: php
+
+cache:
+    directories:
+        - "$HOME/.composer/cache"
+        - vendor
+matrix:
+    fast_finish: true
+    include:
+        - php: 7.1
+          env:
+              - TRAVIS="TRUE"
+              - COMPOSER_FLAGS="--no-interaction"
+              - CODE_COVERAGE="--coverage-clover=coverage.clover"
+
+before_install:
+    - if [[ -z $CODE_COVERAGE ]]; then phpenv config-rm xdebug.ini ; fi
+    - composer self-update
+
+install:
+    - travis_retry composer update $COMPOSER_FLAGS
+    - composer info
+
+script:
+    - ./vendor/bin/phpunit $CODE_COVERAGE
+
+notifications:
+  email: true
+
+after_success:
+- if [[ -n $CODE_COVERAGE ]]; then wget https://scrutinizer-ci.com/ocular.phar ; fi
+- if [[ -n $CODE_COVERAGE ]]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover ; fi

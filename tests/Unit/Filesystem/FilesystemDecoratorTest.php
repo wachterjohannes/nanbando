@@ -2,8 +2,8 @@
 
 namespace Nanbando\Tests\Unit\Filesystem;
 
-use Nanbando\Filesystem\FilesystemInterface;
 use Nanbando\Filesystem\FilesystemDecorator;
+use Nanbando\Filesystem\FilesystemInterface;
 use Nanbando\Tests\TestCase;
 
 class FilesystemDecoratorTest extends TestCase

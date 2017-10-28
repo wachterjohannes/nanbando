@@ -25,7 +25,7 @@ abstract class Command extends SymfonyCommand
         return $client = $this->getApplication()->getClient()->run($command);
     }
 
-    protected abstract function doExecute(InputInterface $input, OutputInterface $output);
+    abstract protected function doExecute(InputInterface $input, OutputInterface $output);
 
     public function getApplication(): Application
     {

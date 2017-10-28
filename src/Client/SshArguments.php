@@ -104,7 +104,7 @@ class SshArguments
     {
         $controlPath = $this->generateControlPath($host);
 
-        $multiplexDefaults = (new SshArguments)->withOptions(
+        $multiplexDefaults = (new self())->withOptions(
             [
                 'ControlMaster' => 'auto',
                 'ControlPersist' => '60',
@@ -116,7 +116,7 @@ class SshArguments
     }
 
     /**
-     * Return SSH multiplexing control path
+     * Return SSH multiplexing control path.
      *
      * When ControlPath is longer than 104 chars we can get:
      *
@@ -128,6 +128,7 @@ class SshArguments
      * @param HostInterface $host
      *
      * @return string ControlPath
+     *
      * @throws \Exception
      */
     private function generateControlPath(HostInterface $host)
@@ -140,23 +141,27 @@ class SshArguments
         do {
             switch ($tryLongestPossible) {
                 case 1:
-                    $controlPath = "~/.ssh/deployer_%C";
+                    $controlPath = '~/.ssh/deployer_%C';
+
                     break;
                 case 2:
                     $controlPath = "~/deployer_$connectionData";
+
                     break;
                 case 3:
-                    $controlPath = "~/deployer_%C";
+                    $controlPath = '~/deployer_%C';
+
                     break;
                 case 4:
-                    $controlPath = "~/mux_%C";
+                    $controlPath = '~/mux_%C';
+
                     break;
                 case 5:
                     throw new \Exception("The multiplexing control path is too long. Control path is: $controlPath");
                 default:
                     $controlPath = "~/.ssh/deployer_$connectionData";
             }
-            $tryLongestPossible++;
+            ++$tryLongestPossible;
         } while (strlen($controlPath) > 104); // Unix socket max length
 
         return $controlPath;

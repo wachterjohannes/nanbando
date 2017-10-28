@@ -2,11 +2,11 @@
 
 namespace Nanbando\Tests\Recipes\Basic;
 
-use function Nanbando\host;
 use Nanbando\Host\HostInterface;
 use Nanbando\Host\HostRegistry;
 use Nanbando\Nanbando;
 use Nanbando\Tests\TestCase;
+use function Nanbando\host;
 
 class HostTest extends TestCase
 {

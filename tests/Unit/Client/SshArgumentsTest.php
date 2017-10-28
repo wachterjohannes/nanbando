@@ -52,18 +52,18 @@ class SshArgumentsTest extends TestCase
             [
                 ['-A', '-F'],
                 [],
-                '-A -F'
+                '-A -F',
             ],
             [
                 ['-A', '-F'],
                 ['Option' => 'Value'],
-                '-A -F -o Option=Value'
+                '-A -F -o Option=Value',
             ],
             [
                 ['-A', '-b' => 'somevalue'],
                 ['Option' => 'Value'],
-                '-A -b somevalue -o Option=Value'
-            ]
+                '-A -b somevalue -o Option=Value',
+            ],
         ];
     }
 
