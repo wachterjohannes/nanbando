@@ -15,9 +15,22 @@ class TaskCommand extends Command
 
     public function __construct(string $name, TaskInterface $task)
     {
-        parent::__construct($name);
-
         $this->task = $task;
+
+        parent::__construct($name);
+    }
+
+    protected function configure()
+    {
+        $this->setDescription($this->task->getDescription());
+
+        foreach ($this->task->getOptions() as $option) {
+            $this->getDefinition()->addOption($option);
+        }
+
+        foreach ($this->task->getArguments() as $argument) {
+            $this->getDefinition()->addArgument($argument);
+        }
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)

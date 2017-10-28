@@ -10,7 +10,7 @@ use Nanbando\Filesystem\FilesystemInterface;
 use Nanbando\Task\TaskInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 
 class BackupTaskCollectionTest extends TestCase
@@ -22,7 +22,7 @@ class BackupTaskCollectionTest extends TestCase
 
         $filesystem = $this->prophesize(FilesystemInterface::class);
         $filesystemFactory = $this->prophesize(FilesystemFactory::class);
-        $filesystemFactory->create()->willReturn($filesystem->reveal());
+        $filesystemFactory->create('test-label')->willReturn($filesystem->reveal());
 
         $filesystem->getName()->willReturn('20170101-175310')->shouldBeCalled();
         $filesystem->addContent(Argument::cetera())->shouldBeCalled();
@@ -42,11 +42,15 @@ class BackupTaskCollectionTest extends TestCase
         $task->after(Argument::type('callable'), Argument::type('array'))->shouldBeCalled();
         $task->invoke()->shouldBeCalled();
 
+        $input = $this->prophesize(InputInterface::class);
+        $input->getArgument('label')->willReturn('test-label');
+        $input->getOption('message')->willReturn('');
+
         $taskCollection = new BackupTaskCollection(
             $filesystemFactory->reveal(),
             $application->reveal(),
             new NullOutput(),
-            new ArgvInput()
+            $input->reveal()
         );
 
         $taskCollection->register('test', $task->reveal());

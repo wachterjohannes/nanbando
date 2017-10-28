@@ -63,16 +63,16 @@ class BackupTaskCollection extends TaskCollection
 
     public function initialize()
     {
-        // TODO label, message, version, name
-        $label = '';
-        $message = '';
+        // TODO version, name
         $version = '0.1';
         $name = 'nanbando';
 
+        $label = $this->input->getArgument('label');
+        $message = $this->input->getOption('message');
         $process = $this->application->getProcess();
         $started = new \DateTime();
 
-        $this->context = new BackupContext($this->filesystemFactory->create());
+        $this->context = new BackupContext($this->filesystemFactory->create($label));
 
         $this->context->set('label', $label);
         $this->context->set('message', $message);
@@ -128,7 +128,7 @@ class BackupTaskCollection extends TaskCollection
 
         $backupName = $this->context->getFilesystem()->getName();
 
-        // TODO name, status
+        // TODO status
         $status = 'successfully';
 
         $this->context->set('finished', new \DateTime());

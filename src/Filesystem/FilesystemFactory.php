@@ -11,8 +11,7 @@ class FilesystemFactory
     {
         $fileName = date('Ymd-His');
         if ($label !== '') {
-            // TODO escape label
-            $fileName = sprintf('%s_%s', $fileName, $label);
+            $fileName = sprintf('%s_%s', $fileName, \URLify::filter($label));
         }
 
         $fileName .= '.tar';

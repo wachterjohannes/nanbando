@@ -2,8 +2,26 @@
 
 namespace Nanbando\Task;
 
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+
 class Task implements TaskInterface
 {
+    /**
+     * @var string
+     */
+    private $description;
+
+    /**
+     * @var InputOption[]
+     */
+    private $options = [];
+
+    /**
+     * @var InputArgument[]
+     */
+    private $arguments = [];
+
     /**
      * @var callable
      */
@@ -33,6 +51,42 @@ class Task implements TaskInterface
     public function getCallable(): callable
     {
         return $this->callable;
+    }
+
+    public function setDescription(string $description): TaskInterface
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function addOption(InputOption $option): TaskInterface
+    {
+        $this->options[] = $option;
+
+        return $this;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    public function addArgument(InputArgument $argument): TaskInterface
+    {
+        $this->arguments[] = $argument;
+
+        return $this;
+    }
+
+    public function getArguments(): array
+    {
+        return $this->arguments;
     }
 
     public function getParameter(): array
