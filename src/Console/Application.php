@@ -77,6 +77,11 @@ class Application extends SymfonyApplication
         return $this->hostRegistry->get($host);
     }
 
+    public function getProcess(): ?string
+    {
+        return $this->getOption(['--process', '-p'], null);
+    }
+
     public function getClient(): ClientInterface
     {
         return $this->clientFactory->create($this->getHost());
@@ -104,14 +109,19 @@ class Application extends SymfonyApplication
         );
         $definition->addOption(
             new InputOption(
-                'host', null, InputOption::VALUE_REQUIRED, 'TODO', 'localhost'
+                'host', null, InputOption::VALUE_REQUIRED, 'TODO host description', 'localhost'
+            )
+        );
+        $definition->addOption(
+            new InputOption(
+                'process', 'p', InputOption::VALUE_REQUIRED, 'TODO'
             )
         );
 
         return $definition;
     }
 
-    protected function getOption(array $names, string $default)
+    protected function getOption(array $names, string $default = null)
     {
         foreach ($names as $name) {
             if ($this->input->hasParameterOption($name, true)) {

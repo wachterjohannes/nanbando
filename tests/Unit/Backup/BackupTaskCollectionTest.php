@@ -4,17 +4,22 @@ namespace Nanbando\Tests\Unit\Backup;
 
 use Nanbando\Backup\BackupTaskCollection;
 use Nanbando\Backup\Context\BackupContext;
+use Nanbando\Console\Application;
 use Nanbando\Filesystem\FilesystemFactory;
 use Nanbando\Filesystem\FilesystemInterface;
 use Nanbando\Task\TaskInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\NullOutput;
 
 class BackupTaskCollectionTest extends TestCase
 {
     public function testInvoke()
     {
+        $application = $this->prophesize(Application::class);
+        $application->getProcess()->willReturn(null);
+
         $filesystem = $this->prophesize(FilesystemInterface::class);
         $filesystemFactory = $this->prophesize(FilesystemFactory::class);
         $filesystemFactory->create()->willReturn($filesystem->reveal());
@@ -37,7 +42,12 @@ class BackupTaskCollectionTest extends TestCase
         $task->after(Argument::type('callable'), Argument::type('array'))->shouldBeCalled();
         $task->invoke()->shouldBeCalled();
 
-        $taskCollection = new BackupTaskCollection($filesystemFactory->reveal(), new NullOutput());
+        $taskCollection = new BackupTaskCollection(
+            $filesystemFactory->reveal(),
+            $application->reveal(),
+            new NullOutput(),
+            new ArgvInput()
+        );
 
         $taskCollection->register('test', $task->reveal());
 
