@@ -4,6 +4,8 @@ namespace Nanbando\Filesystem;
 
 interface FilesystemInterface
 {
+    public function getName(): string;
+
     public function decorate(string $prefix): FilesystemInterface;
 
     public function tempFilename(): string;

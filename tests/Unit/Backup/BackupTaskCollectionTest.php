@@ -9,6 +9,7 @@ use Nanbando\Filesystem\FilesystemInterface;
 use Nanbando\Task\TaskInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Symfony\Component\Console\Output\NullOutput;
 
 class BackupTaskCollectionTest extends TestCase
 {
@@ -18,6 +19,7 @@ class BackupTaskCollectionTest extends TestCase
         $filesystemFactory = $this->prophesize(FilesystemFactory::class);
         $filesystemFactory->create()->willReturn($filesystem->reveal());
 
+        $filesystem->getName()->willReturn('20170101-175310')->shouldBeCalled();
         $filesystem->addContent(Argument::cetera())->shouldBeCalled();
         $filesystem->close()->shouldBeCalled();
 
@@ -35,7 +37,7 @@ class BackupTaskCollectionTest extends TestCase
         $task->after(Argument::type('callable'), Argument::type('array'))->shouldBeCalled();
         $task->invoke()->shouldBeCalled();
 
-        $taskCollection = new BackupTaskCollection($filesystemFactory->reveal());
+        $taskCollection = new BackupTaskCollection($filesystemFactory->reveal(), new NullOutput());
 
         $taskCollection->register('test', $task->reveal());
 

@@ -9,7 +9,7 @@ class FilesystemFactory
 {
     public function create(string $label = ''): FilesystemInterface
     {
-        $fileName = date('Ymd-Hi');
+        $fileName = date('Ymd-His');
         if ($label !== '') {
             // TODO escape label
             $fileName = sprintf('%s_%s', $fileName, $label);

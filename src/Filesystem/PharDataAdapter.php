@@ -20,6 +20,11 @@ class PharDataAdapter implements FilesystemAdapterInterface
         $this->filename = $filename;
     }
 
+    public function getName(): string
+    {
+        return basename($this->filename);
+    }
+
     public function addFile(string $file, string $localName): FilesystemAdapterInterface
     {
         $this->pharData->addFile($file, $localName);

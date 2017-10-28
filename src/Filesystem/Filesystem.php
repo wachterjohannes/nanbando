@@ -20,6 +20,11 @@ class Filesystem implements FilesystemInterface
         $this->adapter = $adapter;
     }
 
+    public function getName(): string
+    {
+        return $this->adapter->getName();
+    }
+
     public function decorate(string $prefix): FilesystemInterface
     {
         return new FilesystemDecorator($this, $prefix);

@@ -8,6 +8,16 @@ use Nanbando\Tests\TestCase;
 
 class FilesystemDecoratorTest extends TestCase
 {
+    public function testGetName()
+    {
+        $filesystem = $this->prophesize(FilesystemInterface::class);
+        $filesystem->getName()->willReturn('20170101-175310')->shouldBeCalled();
+
+        $decorator = new FilesystemDecorator($filesystem->reveal(), 'test');
+
+        $this->assertEquals('20170101-175310', $decorator->getName());
+    }
+
     public function testGetPrefix()
     {
         $filesystem = $this->prophesize(FilesystemInterface::class);

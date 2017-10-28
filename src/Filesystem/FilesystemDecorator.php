@@ -27,6 +27,11 @@ class FilesystemDecorator implements FilesystemInterface
         return $this->prefix;
     }
 
+    public function getName(): string
+    {
+        return $this->filesystem->getName();
+    }
+
     public function decorate(string $prefix): FilesystemInterface
     {
         return $this->filesystem->decorate($prefix);

@@ -10,6 +10,16 @@ use Prophecy\Argument;
 
 class FilesystemTest extends TestCase
 {
+    public function testGetName()
+    {
+        $adapter = $this->prophesize(FilesystemAdapterInterface::class);
+        $adapter->getName()->willReturn('20170101-175310')->shouldBeCalled();
+
+        $filesystem = new Filesystem($adapter->reveal(), sys_get_temp_dir());
+
+        $this->assertEquals('20170101-175310', $filesystem->getName());
+    }
+
     public function testDecorate()
     {
         $adapter = $this->prophesize(FilesystemAdapterInterface::class);
