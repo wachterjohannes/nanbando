@@ -22,17 +22,26 @@ class DirectoryPluginTest extends TestCase
         $context->getFilesystem()->willReturn($filesystem->reveal());
 
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dirname));
+        $fileNames = [];
         foreach ($files as $file) {
             if (!$file->isFile()) {
                 continue;
             }
 
-            $filesystem->addFile($file->getRealPath(), Path::makeRelative($file->getRealPath(), $dirname))
+            $fileNames[] = $filename = Path::makeRelative($file->getRealPath(), $dirname);
+            $filesystem->addFile($file->getRealPath(), $filename)
                 ->shouldBeCalled()
                 ->willReturn($filesystem->reveal());
         }
 
-        $context->set('metadata', Argument::type('array'))->shouldBeCalled();
+        $context->set(
+            'metadata',
+            Argument::that(
+                function (array $metadata) use ($fileNames) {
+                    return $fileNames === array_keys($metadata);
+                }
+            )
+        )->shouldBeCalled();
 
         $plugin = new DirectoryPlugin($dirname);
         $plugin->backup($context->reveal(), new ArgvInput(), new NullOutput());

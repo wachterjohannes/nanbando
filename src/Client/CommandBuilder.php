@@ -30,7 +30,7 @@ class CommandBuilder
     {
         $tokens = array_merge([$this->command], $this->arguments);
         foreach (array_filter($this->options) as $key => $value) {
-            if ($value === true) {
+            if (true === $value) {
                 $tokens[] = sprintf('--%s', $key);
 
                 continue;

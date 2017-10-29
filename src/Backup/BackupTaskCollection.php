@@ -92,10 +92,10 @@ class BackupTaskCollection extends TaskCollection
 
         $this->output->writeln('');
 
-        if (count($this->getTasks()) === 0 && $process) {
+        if (0 === count($this->getTasks()) && $process) {
             $this->style->warning(sprintf('No backup is configured for process "%s".', $process));
             $this->output->writeln('');
-        } elseif (count($this->getTasks()) === 0) {
+        } elseif (0 === count($this->getTasks())) {
             $this->style->warning('No backup is configured.');
             $this->output->writeln('');
         }
@@ -122,7 +122,7 @@ class BackupTaskCollection extends TaskCollection
 
     public function finish()
     {
-        if (count($this->getTasks()) === 0) {
+        if (0 === count($this->getTasks())) {
             return;
         }
 

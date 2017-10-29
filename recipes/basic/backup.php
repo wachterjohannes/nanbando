@@ -33,4 +33,4 @@ function attach(string $name, PluginInterface $plugin, ?array $processes = null)
 registerTask('backup', Nanbando::get()->getService(BackupTaskCollection::class))
     ->setDescription('Create a backup archive')
     ->addOption(new InputOption('message', 'm', InputOption::VALUE_REQUIRED, 'Message describe the backup in detail'))
-    ->addArgument(new InputArgument('label', InputArgument::OPTIONAL, 'Used as part of the filename'));
+    ->addArgument(new InputArgument('label', InputArgument::OPTIONAL, 'Used as part of the filename', ''));

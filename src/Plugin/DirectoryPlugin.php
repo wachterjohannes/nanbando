@@ -32,7 +32,7 @@ class DirectoryPlugin implements PluginInterface
 
         $progressBar = new ProgressBar($output, iterator_count($files));
         $progressBar->setOverwrite(true);
-        $progressBar->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%');
+        $progressBar->setFormat('  %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%');
         $progressBar->start();
 
         $metadata = [];
@@ -57,7 +57,7 @@ class DirectoryPlugin implements PluginInterface
         $output->writeln('');
     }
 
-    private function getMetadata(\SplFileInfo $file): array
+    protected function getMetadata(\SplFileInfo $file): array
     {
         return [
             'filename' => $file->getFilename(),

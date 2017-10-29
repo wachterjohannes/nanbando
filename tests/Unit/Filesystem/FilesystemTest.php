@@ -52,7 +52,7 @@ class FilesystemTest extends TestCase
 
                     $content = file_get_contents($filename);
 
-                    return $content === 'test';
+                    return 'test' === $content;
                 }
             ),
             'test.txt'

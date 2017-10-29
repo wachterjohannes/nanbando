@@ -10,7 +10,7 @@ class FilesystemFactory
     public function create(string $label = ''): FilesystemInterface
     {
         $fileName = date('Ymd-His');
-        if ($label !== '') {
+        if ('' !== $label) {
             $fileName = sprintf('%s_%s', $fileName, \URLify::filter($label));
         }
 

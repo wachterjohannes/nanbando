@@ -83,6 +83,6 @@ class Host implements HostInterface
 
     public function isLocalhost(): bool
     {
-        return $this->name === 'localhost';
+        return 'localhost' === $this->name;
     }
 }
