@@ -9,7 +9,8 @@
         "symfony/process": "^3.3",
         "symfony/console": "^3.3",
         "webmozart/path-util": "^2.3",
-        "jbroadway/urlify": "^1.1"
+        "jbroadway/urlify": "^1.1",
+        "spatie/dropbox-api": "^1.6"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.4"

@@ -6,7 +6,7 @@ interface FilesystemInterface
 {
     public function getName(): string;
 
-    public function decorate(string $prefix): FilesystemInterface;
+    public function decorate(string $prefix): self;
 
     public function tempFilename(): string;
 

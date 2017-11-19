@@ -27,7 +27,7 @@ class BackupContext
      */
     protected $parameterBag;
 
-    public function __construct(FilesystemInterface $filesystem, ?string $name = null, ?BackupContext $parent = null)
+    public function __construct(FilesystemInterface $filesystem, ?string $name = null, ?self $parent = null)
     {
         $this->filesystem = $filesystem;
         $this->name = $name;

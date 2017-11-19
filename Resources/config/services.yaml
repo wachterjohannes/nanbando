@@ -22,6 +22,12 @@ services:
     Nanbando\Backup\BackupTaskCollection:
         class: Nanbando\Backup\BackupTaskCollection
 
+    # Storage
+    Nanbando\Storage\StorageRegistry:
+        class: Nanbando\Storage\StorageRegistry
+    Nanbando\Storage\StorageCommunicator:
+        class: Nanbando\Storage\StorageCommunicator
+
     # Symfony console
     Symfony\Component\Console\Input\ArgvInput:
         class: Symfony\Component\Console\Input\ArgvInput

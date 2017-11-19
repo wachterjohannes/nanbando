@@ -91,7 +91,7 @@ class SshArguments
         return $clone;
     }
 
-    public function withDefaults(SshArguments $defaultOptions)
+    public function withDefaults(self $defaultOptions)
     {
         $clone = clone $this;
         $clone->options = array_merge($defaultOptions->options, $this->options);
