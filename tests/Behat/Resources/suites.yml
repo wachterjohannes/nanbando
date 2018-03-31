@@ -1,0 +1,8 @@
+default:
+    suites:
+        console:
+            contexts_services:
+                - Nanbando\Tests\Behat\ConsoleContext
+
+            filters:
+                tags: "@console"

@@ -1,0 +1,4 @@
+suites:
+    main:
+        namespace: Nanbando
+        psr4_prefix: Nanbando

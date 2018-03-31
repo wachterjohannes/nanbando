@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Nanbando\Console\Application">
+            <argument type="string">Nanbando</argument>
+            <argument type="string">TODO version</argument>
+
+            <call method="setCommandLoader">
+                <argument type="service" id="Symfony\Component\Console\CommandLoader\ContainerCommandLoader"/>
+            </call>
+        </service>
+        <service id="application" alias="Nanbando\Console\Application" public="true"/>
+
+        <service id="Symfony\Component\Console\CommandLoader\ContainerCommandLoader">
+            <argument type="service" id="service_container"/>
+            <argument type="collection"/>
+        </service>
+
+        <service id="Symfony\Component\Console\Input\ArgvInput"/>
+        <service id="input" alias="Symfony\Component\Console\Input\ArgvInput" public="true"/>
+
+        <service id="Symfony\Component\Console\Output\ConsoleOutput"/>
+        <service id="output" alias="Symfony\Component\Console\Output\ConsoleOutput" public="true"/>
+
+        <service id="Nanbando\Console\Command\BackupCommand">
+            <tag name="console.command" command="backup" />
+        </service>
+
+        <service id="Nanbando\Console\Command\RestoreCommand">
+            <tag name="console.command" command="restore" />
+        </service>
+    </services>
+</container>
