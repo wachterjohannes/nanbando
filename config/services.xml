@@ -2,6 +2,10 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="local"></parameter>
+    </parameters>
+
     <services>
         <service id="Nanbando\Console\Application">
             <argument type="string">Nanbando</argument>
@@ -24,12 +28,48 @@
         <service id="Symfony\Component\Console\Output\ConsoleOutput"/>
         <service id="output" alias="Symfony\Component\Console\Output\ConsoleOutput" public="true"/>
 
-        <service id="Nanbando\Console\Command\BackupCommand">
-            <tag name="console.command" command="backup" />
+        <service id="Nanbando\Clock\Clock"/>
+
+        <service id="Nanbando\Script\ScriptRegistry">
+            <argument type="collection"/>
         </service>
 
-        <service id="Nanbando\Console\Command\RestoreCommand">
-            <tag name="console.command" command="restore" />
+        <service id="Nanbando\Console\OutputFormatter">
+            <argument type="service" id="output"/>
+        </service>
+
+        <service id="Nanbando\Backup\TarFactory"/>
+        <service id="Symfony\Component\Filesystem\Filesystem"/>
+
+        <service id="Nanbando\TempFileManager\TempFileManager">
+            <argument type="service" id="Symfony\Component\Filesystem\Filesystem"/>
+        </service>
+
+        <service id="Nanbando\Backup\BackupWriter">
+            <argument type="string">%local%</argument>
+            <argument type="service" id="Nanbando\Backup\TarFactory"/>
+            <argument type="service" id="Symfony\Component\Filesystem\Filesystem"/>
+            <argument type="service" id="Nanbando\Clock\Clock"/>
+        </service>
+
+        <service id="Nanbando\Backup\BackupRunner">
+            <argument type="service" id="Nanbando\Clock\Clock"/>
+            <argument type="service" id="Nanbando\Script\ScriptRegistry"/>
+            <argument type="service" id="Nanbando\Backup\BackupWriter"/>
+            <argument type="service" id="Nanbando\TempFileManager\TempFileManager"/>
+            <argument type="service" id="Nanbando\Console\OutputFormatter"/>
+        </service>
+
+        <service id="Nanbando\Console\Command\BackupCommand">
+            <argument type="service" id="Nanbando\Backup\BackupRunner"/>
+
+            <tag name="console.command" command="backup"/>
+        </service>
+
+        <service id="Nanbando\Console\Command\DebugParameterCommand">
+            <argument type="service" id="service_container"/>
+
+            <tag name="console.command" command="debug:parameter"/>
         </service>
     </services>
 </container>

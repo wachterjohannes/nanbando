@@ -7,3 +7,10 @@
 /composer.lock
 /vendor
 
+# MacOS
+.DS_Store
+
+# Tests
+/tests/Resources/backup.php
+/tests/Resources/var
+/var
