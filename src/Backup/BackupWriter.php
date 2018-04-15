@@ -52,21 +52,24 @@ class BackupWriter
             $fileName = sprintf('%s_%s', $fileName, $label);
         }
 
-        $fileName .= '.tar.gz';
-
         $tar = $this->factory->create();
         $tar->setCompression(9, Archive::COMPRESS_AUTO);
-        $tar->create(Path::join($this->localDirectory, $fileName));
+        $tar->create(Path::join($this->localDirectory, $fileName . '.tar.gz'));
 
-        $progressBar = $output->progressBar(count($backupArchive->getFiles()) + 1);
+        $progressBar = $output->progressBar(count($backupArchive->getFiles()) + 2);
         foreach ($backupArchive->getFiles() as $name => $file) {
             $progressBar->advance();
             $tar->addFile($file, $name);
         }
 
+        $databaseContent = json_encode($backupArchive->all());
+
         $progressBar->advance();
-        $tar->addData('database.json', json_encode($backupArchive->all()));
+        $tar->addData('database.json', $databaseContent);
         $tar->close();
+
+        $progressBar->advance();
+        $this->filesystem->dumpFile(Path::join($this->localDirectory, $fileName . '.json'), $databaseContent);
 
         $progressBar->finish();
 

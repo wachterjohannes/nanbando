@@ -60,10 +60,31 @@
             <argument type="service" id="Nanbando\Console\OutputFormatter"/>
         </service>
 
+        <service id="Nanbando\Storage\LocalFinderFactory">
+            <argument type="string">%local%</argument>
+            <argument type="service" id="Symfony\Component\Filesystem\Filesystem"/>
+        </service>
+
+        <service id="Symfony\Component\Finder\Finder">
+            <factory service="Nanbando\Storage\LocalFinderFactory" method="create"/>
+        </service>
+
+        <service id="Nanbando\Storage\StorageRegistry">
+            <argument type="collection"/>
+        </service>
+
         <service id="Nanbando\Console\Command\BackupCommand">
             <argument type="service" id="Nanbando\Backup\BackupRunner"/>
 
             <tag name="console.command" command="backup"/>
+        </service>
+
+        <service id="Nanbando\Console\Command\PushToCommand">
+            <argument type="service" id="Symfony\Component\Finder\Finder"/>
+            <argument type="service" id="Nanbando\Storage\StorageRegistry"/>
+            <argument type="service" id="Nanbando\Console\OutputFormatter"/>
+
+            <tag name="console.command" command="push-to"/>
         </service>
 
         <service id="Nanbando\Console\Command\DebugParameterCommand">

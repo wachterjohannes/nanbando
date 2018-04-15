@@ -52,14 +52,18 @@ class BackupWriterSpec extends ObjectBehavior
         );
         $backupArchive->all()->willReturn(['key1' => 'value1', 'key2' => 'value2']);
 
+        $databaseContent = json_encode(['key1' => 'value1', 'key2' => 'value2']);
+
         $tar->create('/tmp/20180405-202000.tar.gz')->shouldBeCalled();
         $tar->setCompression(9, -1)->shouldBeCalled();
         $tar->addFile('/tmp/test1.txt', 'uploads/test1.txt')->shouldBeCalled();
         $tar->addFile('/tmp/test2.txt', 'uploads/test2.txt')->shouldBeCalled();
-        $tar->addData('database.json', json_encode(['key1' => 'value1', 'key2' => 'value2']))->shouldBeCalled();
+        $tar->addData('database.json', $databaseContent)->shouldBeCalled();
         $tar->close()->shouldBeCalled();
 
-        $this->write($backupArchive, $outputFormatter)->shouldEqual('20180405-202000.tar.gz');
+        $filesystem->dumpFile('/tmp/20180405-202000.json', $databaseContent)->shouldBeCalled();
+
+        $this->write($backupArchive, $outputFormatter)->shouldEqual('20180405-202000');
     }
 
     public function it_should_create_folder_if_not_exists(
@@ -81,6 +85,8 @@ class BackupWriterSpec extends ObjectBehavior
         $tar->addData('database.json', json_encode([]))->shouldBeCalled();
         $tar->close()->shouldBeCalled();
 
+        $filesystem->dumpFile('/tmp/20180405-202000.json', json_encode([]))->shouldBeCalled();
+
         $this->write($backupArchive, $outputFormatter);
     }
 
@@ -101,6 +107,8 @@ class BackupWriterSpec extends ObjectBehavior
         $tar->addFile(Argument::cetera())->shouldNotBeCalled();
         $tar->addData('database.json', json_encode([]))->shouldBeCalled();
         $tar->close()->shouldBeCalled();
+
+        $filesystem->dumpFile('/tmp/20180405-202000_testtag.json', json_encode([]))->shouldBeCalled();
 
         $this->write($backupArchive, $outputFormatter);
     }

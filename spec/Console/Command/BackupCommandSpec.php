@@ -14,9 +14,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class BackupCommandSpec extends ObjectBehavior
 {
     public function let(
-        BackupRunner $backup
+        BackupRunner $backup,
+        InputInterface $input
     ) {
         $this->beConstructedWith($backup);
+
+        $input->bind(Argument::cetera())->willReturn(null);
+        $input->isInteractive()->willReturn(null);
+        $input->hasArgument(Argument::cetera())->willReturn(null);
+        $input->validate()->willReturn(null);
     }
 
     public function it_is_initializable()
@@ -35,6 +41,9 @@ class BackupCommandSpec extends ObjectBehavior
         BackupRunner $backup,
         BackupArchiveInterface $backupArchive
     ) {
+        $input->getArgument('tag')->willReturn(null);
+        $input->getOption('message')->willReturn(null);
+
         $backup->run(null, null)->shouldBeCalled()->willReturn($backupArchive);
 
         $this->run($input, $output);
@@ -46,11 +55,6 @@ class BackupCommandSpec extends ObjectBehavior
         BackupRunner $backup,
         BackupArchiveInterface $backupArchive
     ) {
-        $input->bind(Argument::cetera())->shouldBeCalled();
-        $input->isInteractive()->shouldBeCalled();
-        $input->hasArgument(Argument::cetera())->shouldBeCalled();
-        $input->validate()->shouldBeCalled();
-
         $input->getArgument('tag')->willReturn('testtag');
         $input->getOption('message')->willReturn(null);
 
@@ -65,11 +69,6 @@ class BackupCommandSpec extends ObjectBehavior
         BackupRunner $backup,
         BackupArchiveInterface $backupArchive
     ) {
-        $input->bind(Argument::cetera())->shouldBeCalled();
-        $input->isInteractive()->shouldBeCalled();
-        $input->hasArgument(Argument::cetera())->shouldBeCalled();
-        $input->validate()->shouldBeCalled();
-
         $input->getArgument('tag')->willReturn(null);
         $input->getOption('message')->willReturn('testmessage');
 

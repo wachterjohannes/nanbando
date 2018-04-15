@@ -17,6 +17,7 @@ Feature: Run backup command
         And I run "bin/nanbando backup"
         Then I should see "Backup started", "Backup finished"
         And The file "var/backups/20180405-202000.tar.gz" should exists
+        And The file "var/backups/20180405-202000.json" should exists
         And The backup-archive "var/backups/20180405-202000.tar.gz" should include following files
           | name                          | hash                                                     | size   |
           | uploads/84-0-frankenstein.txt | 110cf6e796f0f1b7926036369d25499c047798b6c7ba871b24f57119 | 442932 |
@@ -35,6 +36,7 @@ Feature: Run backup command
           """
         And I run "bin/nanbando backup testtag"
         And The file "var/backups/20180405-202000_testtag.tar.gz" should exists
+        And The file "var/backups/20180405-202000_testtag.json" should exists
         And The backup-archive "var/backups/20180405-202000_testtag.tar.gz" should contain following parameters
           | name  | type   | value   |
           | label | string | testtag |
@@ -46,6 +48,7 @@ Feature: Run backup command
           """
         And I run "bin/nanbando backup -m mymessage"
         And The file "var/backups/20180405-202000.tar.gz" should exists
+        And The file "var/backups/20180405-202000.json" should exists
         And The backup-archive "var/backups/20180405-202000.tar.gz" should contain following parameters
           | name    | type   | value     |
           | message | string | mymessage |

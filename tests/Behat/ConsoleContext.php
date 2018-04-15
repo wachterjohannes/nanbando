@@ -29,6 +29,11 @@ class ConsoleContext implements Context
     private $workingDirectory;
 
     /**
+     * @var string
+     */
+    private $fileContent;
+
+    /**
      * @When /^I run "([^"]*)"$/
      */
     public function iRun(string $argument): void
@@ -63,6 +68,10 @@ class ConsoleContext implements Context
     public function iSetStopTheTimeAt($dateTimeString)
     {
         $this->dateTimeString = $dateTimeString;
+
+        if ($this->fileContent) {
+            $this->thereExistsFollowingFile('backup.php', new PyStringNode([$this->fileContent], 0));
+        }
     }
 
     /**
@@ -87,6 +96,8 @@ EOT;
         $content .= PHP_EOL . PHP_EOL . trim($string);
 
         file_put_contents($this->workingDirectory . '/' . $fileName, $content);
+
+        $this->fileContent = $string;
     }
 
     /**
@@ -175,10 +186,11 @@ EOT;
 
     /**
      * @Given /^I cleanup the backup directory$/
+     * @Given /^I cleanup the directory "([^"]*)"$/
      */
-    public function iCleanupTheBackupDirectory()
+    public function iCleanupTheBackupDirectory(string $directory = 'var')
     {
-        (new Filesystem())->remove($this->workingDirectory . '/var');
+        (new Filesystem())->remove($this->workingDirectory . '/' . $directory);
     }
 
     /**
