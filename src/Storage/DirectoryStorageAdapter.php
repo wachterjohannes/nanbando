@@ -6,9 +6,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Webmozart\PathUtil\Path;
 
-class DirectoryStorage implements StorageInterface
+class DirectoryStorageAdapter implements StorageAdapterInterface
 {
-    public static function create(string $directory): StorageInterface
+    public static function create(string $directory): StorageAdapterInterface
     {
         return new self($directory, new Filesystem());
     }
@@ -48,10 +48,10 @@ class DirectoryStorage implements StorageInterface
         $result = [];
         /** @var \SplFileInfo $file */
         foreach ((new Finder())->files()->in($this->directory) as $file) {
-            $result[] = $file->getFilename();
+            $result[] = explode('.', $file->getFilename())[0];
         }
 
-        return $result;
+        return array_unique($result);
     }
 
     public function fetch(string $name, string $destination): void

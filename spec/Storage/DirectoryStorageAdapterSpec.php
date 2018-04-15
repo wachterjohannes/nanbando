@@ -2,12 +2,12 @@
 
 namespace spec\Nanbando\Storage;
 
-use Nanbando\Storage\DirectoryStorage;
-use Nanbando\Storage\StorageInterface;
+use Nanbando\Storage\DirectoryStorageAdapter;
+use Nanbando\Storage\StorageAdapterInterface;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem;
 
-class DirectoryStorageSpec extends ObjectBehavior
+class DirectoryStorageAdapterSpec extends ObjectBehavior
 {
     public function let(
         Filesystem $filesystem
@@ -17,12 +17,12 @@ class DirectoryStorageSpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType(DirectoryStorage::class);
+        $this->shouldHaveType(DirectoryStorageAdapter::class);
     }
 
     public function it_should_implement_storage_interface()
     {
-        $this->shouldBeAnInstanceOf(StorageInterface::class);
+        $this->shouldBeAnInstanceOf(StorageAdapterInterface::class);
     }
 
     public function it_should_copy_file_to_storage(

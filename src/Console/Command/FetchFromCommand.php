@@ -8,15 +8,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Webmozart\PathUtil\Path;
 
 class FetchFromCommand extends Command
 {
-    /**
-     * @var string
-     */
-    private $localDirectory;
-
     /**
      * @var StorageRegistry
      */
@@ -27,11 +21,10 @@ class FetchFromCommand extends Command
      */
     private $output;
 
-    public function __construct(string $localDirectory, StorageRegistry $registry, OutputFormatter $output)
+    public function __construct(StorageRegistry $registry, OutputFormatter $output)
     {
         parent::__construct();
 
-        $this->localDirectory = $localDirectory;
         $this->registry = $registry;
         $this->output = $output;
     }
@@ -46,9 +39,7 @@ class FetchFromCommand extends Command
         $this->output->headline('Fetch from %s started', $input->getArgument('storage'));
 
         $storage = $this->registry->get($input->getArgument('storage'));
-        foreach ($storage->listFiles() as $file) {
-            $storage->fetch($file, Path::join($this->localDirectory, $file));
-        }
+        $storage->fetch($this->output);
 
         $this->output->info('Fetch finished');
     }

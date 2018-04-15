@@ -13,10 +13,15 @@ function containerBuilder(): ContainerBuilder
     return $container;
 }
 
-function registerService(string $id, $instance): Definition
+function registerService(string $id, $instance = null): Definition
 {
     $containerBuilder = containerBuilder();
-    $definition = $containerBuilder->register($id)->setSynthetic(true);
+    $definition = $containerBuilder->register($id);
+    if (!$instance) {
+        return $definition;
+    }
+
+    $definition->setSynthetic(true);
 
     foreach ($containerBuilder->getCompiler()->getPassConfig()->getPasses() as $pass) {
         if ($pass instanceof SetServicesPass) {

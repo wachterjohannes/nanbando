@@ -11,7 +11,7 @@ Feature: Upload backup archive
           """
             attach('uploads', \Nanbando\Script\DirectoryScript::create(get('%cwd%/uploads')));
 
-            storage('test', \Nanbando\Storage\DirectoryStorage::create(get('%cwd%/var/storage/test')));
+            storage('test', \Nanbando\Storage\DirectoryStorageAdapter::create(get('%cwd%/var/storage/test')));
           """
         And I set stop the time at "2018-04-05 20:20"
         And I run "bin/nanbando backup"

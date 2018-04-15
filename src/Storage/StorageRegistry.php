@@ -5,7 +5,7 @@ namespace Nanbando\Storage;
 class StorageRegistry
 {
     /**
-     * @var StorageInterface[]
+     * @var RemoteStorage[]
      */
     private $storages;
 
@@ -14,7 +14,7 @@ class StorageRegistry
         $this->storages = $storages;
     }
 
-    public function get(string $name): StorageInterface
+    public function get(string $name): RemoteStorage
     {
         return $this->storages[$name];
     }

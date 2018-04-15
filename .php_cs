@@ -16,6 +16,7 @@ return PhpCsFixer\Config::create()
     ->setFinder(
         PhpCsFixer\Finder::create()
             ->exclude('bin')
+            ->exclude('tests/Resources')
             ->exclude('vendor')
             ->in(__DIR__)
     );

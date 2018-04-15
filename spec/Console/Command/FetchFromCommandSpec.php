@@ -4,7 +4,7 @@ namespace spec\Nanbando\Console\Command;
 
 use Nanbando\Console\Command\FetchFromCommand;
 use Nanbando\Console\OutputFormatter;
-use Nanbando\Storage\StorageInterface;
+use Nanbando\Storage\RemoteStorage;
 use Nanbando\Storage\StorageRegistry;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -16,11 +16,11 @@ class FetchFromCommandSpec extends ObjectBehavior
 {
     public function let(
         StorageRegistry $registry,
-        OutputFormatter $output,
-        StorageInterface $storage,
+        OutputFormatter $outputFormatter,
+        RemoteStorage $storage,
         InputInterface $input
     ) {
-        $this->beConstructedWith('/var/backups', $registry, $output);
+        $this->beConstructedWith($registry, $outputFormatter);
 
         $registry->get('test')->willReturn($storage);
 
@@ -43,14 +43,12 @@ class FetchFromCommandSpec extends ObjectBehavior
     public function it_should_upload_not_existing_files(
         InputInterface $input,
         OutputInterface $output,
-        StorageInterface $storage
+        RemoteStorage $storage,
+        OutputFormatter $outputFormatter
     ) {
         $input->getArgument('storage')->willReturn('test');
 
-        $storage->listFiles()->willReturn(['20180412-202357.tar.gz', '20180413-202357.tar.gz']);
-
-        $storage->fetch('20180412-202357.tar.gz', '/var/backups/20180412-202357.tar.gz')->shouldBeCalled();
-        $storage->fetch('20180413-202357.tar.gz', '/var/backups/20180413-202357.tar.gz')->shouldBeCalled();
+        $storage->fetch($outputFormatter)->shouldBeCalled();
 
         $this->run($input, $output);
     }

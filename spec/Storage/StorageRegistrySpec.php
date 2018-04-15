@@ -2,7 +2,7 @@
 
 namespace spec\Nanbando\Storage;
 
-use Nanbando\Storage\StorageInterface;
+use Nanbando\Storage\RemoteStorage;
 use Nanbando\Storage\StorageRegistry;
 use PhpSpec\ObjectBehavior;
 
@@ -14,7 +14,7 @@ class StorageRegistrySpec extends ObjectBehavior
     }
 
     public function it_should_return_storage(
-        StorageInterface $storage
+        RemoteStorage $storage
     ) {
         $this->beConstructedWith(['test' => $storage]);
 

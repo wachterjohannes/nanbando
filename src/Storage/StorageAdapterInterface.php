@@ -2,7 +2,7 @@
 
 namespace Nanbando\Storage;
 
-interface StorageInterface
+interface StorageAdapterInterface
 {
     public function push(string $filePath): void;
 

@@ -23,12 +23,12 @@ class LocalFinderFactory
         $this->filesystem = $filesystem;
     }
 
-    public function create()
+    public function create(): Finder
     {
         if (!$this->filesystem->exists($this->localDirectory)) {
             $this->filesystem->mkdir($this->localDirectory);
         }
 
-        return Finder::create()->files()->in($this->localDirectory);
+        return Finder::create()->files()->in($this->localDirectory)->sortByName();
     }
 }

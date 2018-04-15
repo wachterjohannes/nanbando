@@ -8,15 +8,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 
 class PushToCommand extends Command
 {
-    /**
-     * @var Finder
-     */
-    private $finder;
-
     /**
      * @var StorageRegistry
      */
@@ -27,11 +21,10 @@ class PushToCommand extends Command
      */
     private $output;
 
-    public function __construct(Finder $finder, StorageRegistry $registry, OutputFormatter $output)
+    public function __construct(StorageRegistry $registry, OutputFormatter $output)
     {
         parent::__construct();
 
-        $this->finder = $finder;
         $this->registry = $registry;
         $this->output = $output;
     }
@@ -46,11 +39,7 @@ class PushToCommand extends Command
         $this->output->headline('Push to %s started', $input->getArgument('storage'));
 
         $storage = $this->registry->get($input->getArgument('storage'));
-        foreach ($this->finder as $file) {
-            if (!$storage->exists($file->getPathname())) {
-                $storage->push($file->getPathname());
-            }
-        }
+        $storage->push($this->output);
 
         $this->output->info('Push finished');
     }
