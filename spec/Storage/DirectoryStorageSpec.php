@@ -44,4 +44,18 @@ class DirectoryStorageSpec extends ObjectBehavior
 
         $this->exists($filePath)->shouldEqual(true);
     }
+
+    public function it_should_list_files()
+    {
+        $this->listFiles()->shouldEqual([]);
+    }
+
+    public function it_should_copy_file(
+        Filesystem $filesystem
+    ) {
+        $filesystem->copy('/tmp/storage/20180412-202357.tar.gz', '/tmp/var/backups/20180412-202357.tar.gz', true)
+            ->shouldBeCalled();
+
+        $this->fetch('20180412-202357.tar.gz', '/tmp/var/backups/20180412-202357.tar.gz');
+    }
 }

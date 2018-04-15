@@ -8,14 +8,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
+use Webmozart\PathUtil\Path;
 
-class PushToCommand extends Command
+class FetchFromCommand extends Command
 {
     /**
-     * @var Finder
+     * @var string
      */
-    private $finder;
+    private $localDirectory;
 
     /**
      * @var StorageRegistry
@@ -27,11 +27,11 @@ class PushToCommand extends Command
      */
     private $output;
 
-    public function __construct(Finder $finder, StorageRegistry $registry, OutputFormatter $output)
+    public function __construct(string $localDirectory, StorageRegistry $registry, OutputFormatter $output)
     {
         parent::__construct();
 
-        $this->finder = $finder;
+        $this->localDirectory = $localDirectory;
         $this->registry = $registry;
         $this->output = $output;
     }
@@ -43,15 +43,13 @@ class PushToCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output->headline('Push to %s started', $input->getArgument('storage'));
+        $this->output->headline('Fetch from %s started', $input->getArgument('storage'));
 
         $storage = $this->registry->get($input->getArgument('storage'));
-        foreach ($this->finder as $file) {
-            if (!$storage->exists($file->getPathname())) {
-                $storage->push($file->getPathname());
-            }
+        foreach ($storage->listFiles() as $file) {
+            $storage->fetch($file, Path::join($this->localDirectory, $file));
         }
 
-        $this->output->info('Push finished');
+        $this->output->info('Fetch finished');
     }
 }

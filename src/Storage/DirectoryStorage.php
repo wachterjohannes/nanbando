@@ -3,6 +3,8 @@
 namespace Nanbando\Storage;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Webmozart\PathUtil\Path;
 
 class DirectoryStorage implements StorageInterface
 {
@@ -35,5 +37,25 @@ class DirectoryStorage implements StorageInterface
     public function exists(string $filePath): bool
     {
         return $this->filesystem->exists($this->directory . '/' . basename($filePath));
+    }
+
+    public function listFiles(): array
+    {
+        if (!is_dir($this->directory)) {
+            return [];
+        }
+
+        $result = [];
+        /** @var \SplFileInfo $file */
+        foreach ((new Finder())->files()->in($this->directory) as $file) {
+            $result[] = $file->getFilename();
+        }
+
+        return $result;
+    }
+
+    public function fetch(string $name, string $destination): void
+    {
+        $this->filesystem->copy(Path::join($this->directory, $name), $destination, true);
     }
 }
