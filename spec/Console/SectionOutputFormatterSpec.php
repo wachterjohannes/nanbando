@@ -2,17 +2,19 @@
 
 namespace spec\Nanbando\Console;
 
+use Nanbando\Console\Output\ConsoleSectionOutput;
 use Nanbando\Console\SectionOutputFormatter;
 use PhpSpec\ObjectBehavior;
-use Symfony\Component\Console\Output\ConsoleSectionOutput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class SectionOutputFormatterSpec extends ObjectBehavior
 {
     public function let(
-        ConsoleSectionOutput $output
+        ConsoleSectionOutput $output,
+        ConsoleOutput $consoleOutput
     ) {
-        $this->beConstructedWith($output);
+        $this->beConstructedWith($output, $consoleOutput);
     }
 
     public function it_is_initializable()
@@ -193,9 +195,11 @@ class SectionOutputFormatterSpec extends ObjectBehavior
     }
 
     public function it_should_clear_section(
-        ConsoleSectionOutput $output
+        ConsoleSectionOutput $output,
+        ConsoleOutput $consoleOutput
     ) {
         $output->clear(null)->shouldBeCalled();
+        $consoleOutput->write("\r")->shouldBeCalled();
 
         $this->clear();
     }

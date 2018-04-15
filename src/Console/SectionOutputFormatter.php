@@ -2,8 +2,9 @@
 
 namespace Nanbando\Console;
 
+use Nanbando\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\ConsoleSectionOutput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class SectionOutputFormatter extends BaseOutputFormatter
 {
@@ -15,19 +16,30 @@ class SectionOutputFormatter extends BaseOutputFormatter
      */
     protected $output;
 
-    public function __construct(ConsoleSectionOutput $output, string $headlineCharacter = '=')
-    {
+    /**
+     * @var ConsoleOutput
+     */
+    protected $consoleOutput;
+
+    public function __construct(
+        ConsoleSectionOutput $output,
+        ConsoleOutput $consoleOutput,
+        string $headlineCharacter = '='
+    ) {
         parent::__construct($output, $headlineCharacter);
+
+        $this->consoleOutput = $consoleOutput;
     }
 
     public function clear(?int $lines = null): void
     {
         $this->output->clear($lines);
+        $this->consoleOutput->write("\r");
     }
 
     public function progressBar(int $count = 0)
     {
-        $progressBar = new ProgressBar($this->output, $count);
+        $progressBar = new ProgressBar($this->consoleOutput, $count);
         $progressBar->setOverwrite(true);
         $progressBar->setFormat($count ? self::PROGRESS_BAR_WITH_MAX : self::PROGRESS_BAR_WITHOUT_MAX);
         $progressBar->start();

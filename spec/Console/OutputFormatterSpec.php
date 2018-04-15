@@ -5,8 +5,8 @@ namespace spec\Nanbando\Console;
 use Nanbando\Console\OutputFormatter;
 use Nanbando\Console\SectionOutputFormatter;
 use PhpSpec\ObjectBehavior;
+use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class OutputFormatterSpec extends ObjectBehavior
@@ -196,9 +196,12 @@ class OutputFormatterSpec extends ObjectBehavior
 
     public function it_should_start_secion_and_return_formatter(
         ConsoleOutput $output,
-        ConsoleSectionOutput $sectionOutput
+        OutputFormatterInterface $outputFormatter
     ) {
-        $output->section()->shouldBeCalled()->willReturn($sectionOutput);
+        $output->getStream()->willReturn(fopen('php://temp', 'r'));
+        $output->getVerbosity()->willReturn(1);
+        $output->isDecorated()->willReturn(true);
+        $output->getFormatter()->willReturn($outputFormatter);
 
         $this->section()->shouldBeAnInstanceOf(SectionOutputFormatter::class);
     }
