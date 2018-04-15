@@ -2,3 +2,12 @@ suites:
     main:
         namespace: Nanbando
         psr4_prefix: Nanbando
+
+extensions:
+    LeanPHP\PhpSpec\CodeCoverage\CodeCoverageExtension:
+        format:
+          - html
+          - clover
+        output:
+            html: coverage
+            clover: coverage.xml

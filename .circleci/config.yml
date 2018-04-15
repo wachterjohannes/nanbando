@@ -29,3 +29,8 @@ jobs:
       - run: vendor/bin/phpstan analyze src --level 7
       - run: vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
       - run: vendor/bin/behat
+      - run:
+          name: Upload coverage.xml
+          command: |
+            wget https://scrutinizer-ci.com/ocular.phar
+            php ocular.phar code-coverage:upload --format=php-clover coverage.xml
