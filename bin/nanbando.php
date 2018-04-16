@@ -1,6 +1,7 @@
 <?php
 
 use Nanbando\Console\Application;
+use Nanbando\DependencyInjection\AddNanbandoInitializerPass;
 use Nanbando\DependencyInjection\AddNanbandoScriptPass;
 use Nanbando\DependencyInjection\AddNanbandoStoragePass;
 use Nanbando\DependencyInjection\SetServicesPass;
@@ -18,7 +19,10 @@ $container = new ContainerBuilder();
 $container->addCompilerPass(new AddConsoleCommandPass(ContainerCommandLoader::class));
 $container->addCompilerPass(new AddNanbandoScriptPass());
 $container->addCompilerPass(new AddNanbandoStoragePass());
+$container->addCompilerPass(new AddNanbandoInitializerPass());
 $container->addCompilerPass(new SetServicesPass());
+
+$container->setParameter('cwd', getcwd());
 
 $locator = new FileLocator(__DIR__ . '/../config');
 $loader = new XmlFileLoader($container, $locator);

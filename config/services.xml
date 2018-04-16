@@ -99,5 +99,26 @@
 
             <tag name="console.command" command="debug:parameter"/>
         </service>
+
+        <service id="Nanbando\Console\Command\InitCommand">
+            <argument type="collection"/>
+            <argument type="string">%cwd%</argument>
+            <argument type="service" id="Symfony\Component\Filesystem\Filesystem"/>
+            <argument type="service" id="Nanbando\Console\OutputFormatter"/>
+
+            <tag name="console.command" command="init"/>
+        </service>
+
+        <service id="Nanbando\Initializer\DirectoryScriptInitializer">
+            <argument type="string">%cwd%</argument>
+
+            <tag name="nanbando.initializer" type="script" alias="directory"/>
+        </service>
+
+        <service id="Nanbando\Initializer\DirectoryStorageInitializer">
+            <argument type="string">%cwd%</argument>
+
+            <tag name="nanbando.initializer" type="storage" alias="directory"/>
+        </service>
     </services>
 </container>
