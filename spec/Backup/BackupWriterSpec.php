@@ -4,7 +4,6 @@ namespace spec\Nanbando\Backup;
 
 use Nanbando\Backup\BackupArchive;
 use Nanbando\Backup\BackupWriter;
-use Nanbando\Clock\Clock;
 use Nanbando\Console\SectionOutputFormatter;
 use Nanbando\Tar\TarFactory;
 use PhpSpec\ObjectBehavior;
@@ -19,16 +18,14 @@ class BackupWriterSpec extends ObjectBehavior
     public function let(
         TarFactory $factory,
         Filesystem $filesystem,
-        Clock $clock,
         Tar $tar,
         SectionOutputFormatter $outputFormatter
     ) {
         $outputFormatter->progressBar(Argument::any())->willReturn(new ProgressBar(new NullOutput()));
 
         $factory->create()->willReturn($tar);
-        $clock->getDateTime()->willReturn(new \DateTimeImmutable('2018-04-05 20:20'));
 
-        $this->beConstructedWith('/tmp', $factory, $filesystem, $clock);
+        $this->beConstructedWith('/tmp', $factory, $filesystem);
     }
 
     public function it_is_initializable()
@@ -40,8 +37,11 @@ class BackupWriterSpec extends ObjectBehavior
         Filesystem $filesystem,
         Tar $tar,
         BackupArchive $backupArchive,
-        SectionOutputFormatter $outputFormatter
+        SectionOutputFormatter $outputFormatter,
+        \DateTimeImmutable $dateTime
     ) {
+        $dateTime->format('Ymd-His')->willReturn('20180405-202000');
+
         $filesystem->exists('/tmp')->willReturn(true);
         $backupArchive->get('label')->willReturn('');
         $backupArchive->getFiles()->willReturn(
@@ -63,15 +63,18 @@ class BackupWriterSpec extends ObjectBehavior
 
         $filesystem->dumpFile('/tmp/20180405-202000.json', $databaseContent)->shouldBeCalled();
 
-        $this->write($backupArchive, $outputFormatter)->shouldEqual('20180405-202000');
+        $this->write($dateTime, $backupArchive, $outputFormatter)->shouldEqual('20180405-202000');
     }
 
     public function it_should_create_folder_if_not_exists(
         Filesystem $filesystem,
         Tar $tar,
         BackupArchive $backupArchive,
-        SectionOutputFormatter $outputFormatter
+        SectionOutputFormatter $outputFormatter,
+        \DateTimeImmutable $dateTime
     ) {
+        $dateTime->format('Ymd-His')->willReturn('20180405-202000');
+
         $backupArchive->get('label')->willReturn('');
         $backupArchive->getFiles()->willReturn([]);
         $backupArchive->all()->willReturn([]);
@@ -87,15 +90,18 @@ class BackupWriterSpec extends ObjectBehavior
 
         $filesystem->dumpFile('/tmp/20180405-202000.json', json_encode([]))->shouldBeCalled();
 
-        $this->write($backupArchive, $outputFormatter);
+        $this->write($dateTime, $backupArchive, $outputFormatter);
     }
 
     public function it_should_add_tag_to_filename(
         Filesystem $filesystem,
         Tar $tar,
         BackupArchive $backupArchive,
-        SectionOutputFormatter $outputFormatter
+        SectionOutputFormatter $outputFormatter,
+        \DateTimeImmutable $dateTime
     ) {
+        $dateTime->format('Ymd-His')->willReturn('20180405-202000');
+
         $filesystem->exists('/tmp')->willReturn(true);
         $backupArchive->getFiles()->willReturn([]);
         $backupArchive->all()->willReturn([]);
@@ -110,6 +116,6 @@ class BackupWriterSpec extends ObjectBehavior
 
         $filesystem->dumpFile('/tmp/20180405-202000_testtag.json', json_encode([]))->shouldBeCalled();
 
-        $this->write($backupArchive, $outputFormatter);
+        $this->write($dateTime, $backupArchive, $outputFormatter);
     }
 }

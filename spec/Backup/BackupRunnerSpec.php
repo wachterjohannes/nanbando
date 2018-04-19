@@ -37,7 +37,7 @@ class BackupRunnerSpec extends ObjectBehavior
         $this->shouldHaveType(BackupRunner::class);
     }
 
-    public function it_should_get_back_scripts_and_run_them(
+    public function it_should_get_backup_scripts_and_run_them(
         ScriptRegistry $scriptRegistry,
         BackupWriter $backupWriter,
         TempFileManagerInterface $tempFileManager,
@@ -56,7 +56,7 @@ class BackupRunnerSpec extends ObjectBehavior
         $script1->backup(Argument::type(BackupArchiveInterface::class), $sectionFormatter)->shouldBeCalled();
         $script2->backup(Argument::type(BackupArchiveInterface::class), $sectionFormatter)->shouldBeCalled();
 
-        $backupWriter->write(Argument::type(BackupArchiveInterface::class), $sectionFormatter)
+        $backupWriter->write(Argument::type(\DateTimeImmutable::class), Argument::type(BackupArchiveInterface::class), $sectionFormatter)
             ->shouldBeCalled()
             ->willReturn('20180101-010100');
 

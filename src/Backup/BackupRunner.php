@@ -80,10 +80,10 @@ class BackupRunner
         $finished = $this->clock->getDateTime();
         $backupArchive->set('finished', $finished);
 
-        $archiveFile = $this->writeArchive($backupArchive);
+        $archiveFile = $this->writeArchive($started, $backupArchive);
         $this->cleanupTempFiles();
 
-        $this->output->info('Backup finished at %s in file %s', $started, $archiveFile);
+        $this->output->info('Backup finished at %s in file %s', $this->clock->getDateTime(), $archiveFile);
 
         return $backupArchive;
     }
@@ -101,11 +101,11 @@ class BackupRunner
         $sectionOutput->checkmark('Executing script %s', $name);
     }
 
-    protected function writeArchive(BackupArchive $backupArchive): string
+    protected function writeArchive(\DateTimeImmutable $started, BackupArchive $backupArchive): string
     {
         $sectionOutput = $this->output->section();
         $sectionOutput->headline('Generating backup archive');
-        $archiveFile = $this->backupWriter->write($backupArchive, $sectionOutput);
+        $archiveFile = $this->backupWriter->write($started, $backupArchive, $sectionOutput);
 
         $sectionOutput->clear();
         $sectionOutput->checkmark('Generating backup archive');

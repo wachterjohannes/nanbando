@@ -2,7 +2,6 @@
 
 namespace Nanbando\Backup;
 
-use Nanbando\Clock\Clock;
 use Nanbando\Console\SectionOutputFormatter;
 use Nanbando\Tar\TarFactory;
 use splitbrain\PHPArchive\Archive;
@@ -26,26 +25,23 @@ class BackupWriter
      */
     private $filesystem;
 
-    /**
-     * @var Clock
-     */
-    private $clock;
-
-    public function __construct(string $localDirectory, TarFactory $factory, Filesystem $filesystem, Clock $clock)
+    public function __construct(string $localDirectory, TarFactory $factory, Filesystem $filesystem)
     {
         $this->localDirectory = $localDirectory;
         $this->factory = $factory;
         $this->filesystem = $filesystem;
-        $this->clock = $clock;
     }
 
-    public function write(BackupArchiveInterface $backupArchive, SectionOutputFormatter $output): string
-    {
+    public function write(
+        \DateTimeImmutable $dateTime,
+        BackupArchiveInterface $backupArchive,
+        SectionOutputFormatter $output
+    ): string {
         if (!$this->filesystem->exists($this->localDirectory)) {
             $this->filesystem->mkdir($this->localDirectory);
         }
 
-        $fileName = $this->clock->getDateTime()->format('Ymd-His');
+        $fileName = $dateTime->format('Ymd-His');
         $label = $backupArchive->get('label');
         if ('' !== $label) {
             // TODO slugify label
