@@ -6,13 +6,12 @@ Feature: Run restore command
 
     Background:
         When I am in the resources directory
-        And I set stop the time at "2018-04-05 20:20"
-        And I cleanup the backup directory
+        And I cleanup the resources directory
+        And I extract "backups.zip" to "var/backups"
         And There exists following "backup.php" file
           """
             attach('uploads', \Nanbando\Script\DirectoryScript::create(get('%cwd%/uploads')));
           """
-        And I run "bin/nanbando backup"
 
     Scenario: The restored directory file should contain all the files
         When I run "bin/nanbando restore 20180405-202000"

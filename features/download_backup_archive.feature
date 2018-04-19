@@ -6,21 +6,14 @@ Feature: Upload backup archive
 
     Background:
         When I am in the resources directory
-        And I cleanup the backup directory
+        And I cleanup the resources directory
+        And I extract "backups.zip" to "var/storage/test"
         But There exists following "backup.php" file
           """
-            attach('uploads', \Nanbando\Script\DirectoryScript::create(get('%cwd%/uploads')));
-
             storage('test', \Nanbando\Storage\DirectoryStorageAdapter::create(get('%cwd%/var/storage/test')));
           """
-        And I set stop the time at "2018-04-05 20:20"
-        And I run "bin/nanbando backup"
-        And I set stop the time at "2018-04-12 20:20"
-        And I run "bin/nanbando backup"
-        And I run "bin/nanbando push-to test"
-        And I cleanup the directory "var/backups"
 
-    Scenario: The files should be uploaded when running the "push-to" command
+    Scenario: The files should be uploaded when running the "fetch-from" command
         When I run "bin/nanbando fetch-from test"
         Then I should see "Fetch from "test" started", "Fetch finished"
         And The file "var/backups/20180405-202000.tar.gz" should exists

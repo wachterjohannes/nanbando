@@ -7,14 +7,15 @@ Feature: Run backup command
     Background:
         When I am in the resources directory
         And I set stop the time at "2018-04-05 20:20"
-        And I cleanup the backup directory
-
-    Scenario: The backup file should contain all the files and some additional parameter
-        When There exists following "backup.php" file
+        And I cleanup the resources directory
+        And I extract "uploads.zip" to "uploads"
+        And There exists following "backup.php" file
           """
             attach('uploads', \Nanbando\Script\DirectoryScript::create(get('%cwd%/uploads')));
           """
-        And I run "bin/nanbando backup"
+
+    Scenario: The backup file should contain all the files and some additional parameter
+        When I run "bin/nanbando backup"
         Then I should see "Backup started", "Backup finished"
         And The file "var/backups/20180405-202000.tar.gz" should exists
         And The file "var/backups/20180405-202000.json" should exists
@@ -30,24 +31,16 @@ Feature: Run backup command
           | finished | datetime | 2018-04-05T20:20 |
 
     Scenario: The backup filename should contain the tag
-        When There exists following "backup.php" file
-          """
-            attach('uploads', \Nanbando\Script\DirectoryScript::create(get('%cwd%/uploads')));
-          """
-        And I run "bin/nanbando backup testtag"
-        And The file "var/backups/20180405-202000_testtag.tar.gz" should exists
+        When I run "bin/nanbando backup testtag"
+        Then The file "var/backups/20180405-202000_testtag.tar.gz" should exists
         And The file "var/backups/20180405-202000_testtag.json" should exists
         And The backup-archive "var/backups/20180405-202000_testtag.tar.gz" should contain following parameters
           | name  | type   | value   |
           | label | string | testtag |
 
     Scenario: The backup file should contain the message as parameter
-        When There exists following "backup.php" file
-          """
-            attach('uploads', \Nanbando\Script\DirectoryScript::create(get('%cwd%/uploads')));
-          """
-        And I run "bin/nanbando backup -m mymessage"
-        And The file "var/backups/20180405-202000.tar.gz" should exists
+        When I run "bin/nanbando backup -m mymessage"
+        Then The file "var/backups/20180405-202000.tar.gz" should exists
         And The file "var/backups/20180405-202000.json" should exists
         And The backup-archive "var/backups/20180405-202000.tar.gz" should contain following parameters
           | name    | type   | value     |

@@ -13,6 +13,7 @@
 # Tests
 /tests/Resources/backup.php
 /tests/Resources/var
+/tests/Resources/uploads
 /var
 /coverage
 /coverage.xml

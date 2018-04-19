@@ -6,11 +6,12 @@ Feature: Import files
 
     Background:
         When I am in the resources directory
+        And I cleanup the resources directory
 
     Scenario: When importing parameter the the parameter should be present
         When There exists following "backup.php" file
           """
-            import('app/config/parameters.yml');
+            import('parameters.yml');
           """
         And I run "bin/nanbando debug:parameter"
         And I should see following parameters

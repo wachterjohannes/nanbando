@@ -6,18 +6,12 @@ Feature: Upload backup archive
 
     Background:
         When I am in the resources directory
-        And I cleanup the backup directory
+        And I cleanup the resources directory
+        And I extract "backups.zip" to "var/backups"
         But There exists following "backup.php" file
           """
-            attach('uploads', \Nanbando\Script\DirectoryScript::create(get('%cwd%/uploads')));
-
             storage('test', \Nanbando\Storage\DirectoryStorageAdapter::create(get('%cwd%/var/storage/test')));
           """
-        And I set stop the time at "2018-04-05 20:20"
-        And I run "bin/nanbando backup"
-        And I set stop the time at "2018-04-12 20:20"
-        And I run "bin/nanbando backup"
-        And I cleanup the directory "var/storage/test"
 
     Scenario: The files should be uploaded when running the "push-to" command
         When I run "bin/nanbando push-to test"

@@ -45,8 +45,6 @@ class ConsoleContext implements Context
     {
         $this->process = new Process(__DIR__ . '/../../' . $argument, $this->workingDirectory);
         $this->process->run();
-
-        $this->process->wait();
     }
 
     /**
@@ -201,6 +199,15 @@ EOT;
     }
 
     /**
+     * @Given /^I cleanup the resources directory$/
+     */
+    public function iCleanupTheResourcesDirectory()
+    {
+        (new Filesystem())->remove($this->workingDirectory . '/var');
+        (new Filesystem())->remove($this->workingDirectory . '/uploads');
+    }
+
+    /**
      * @Given /^The database should contain following parameters$/
      */
     public function theDatabaseShouldContainFollowingParameters(TableNode $table)
@@ -267,5 +274,16 @@ EOT;
             Assert::eq(hash_file('sha224', $this->latestFile), $row['hash']);
             Assert::eq(filesize($this->latestFile), $row['size']);
         }
+    }
+
+    /**
+     * @Given /^I extract "([^"]*)" to "([^"]*)"$/
+     */
+    public function iExtractTo(string $archive, string $folder)
+    {
+        (new Filesystem())->mkdir(Path::join($this->workingDirectory, $folder));
+
+        $process = new Process(sprintf('unzip %s -d %s', $archive, $folder), $this->workingDirectory);
+        $process->run();
     }
 }
