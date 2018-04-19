@@ -1,5 +1,7 @@
 <?php
 
+include_once(__DIR__ . '/autoload.php');
+
 use Nanbando\Console\Application;
 use Nanbando\DependencyInjection\AddNanbandoInitializerPass;
 use Nanbando\DependencyInjection\AddNanbandoScriptPass;
@@ -12,8 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Webmozart\PathUtil\Path;
-
-require __DIR__ . '/../vendor/autoload.php';
 
 $container = new ContainerBuilder();
 $container->addCompilerPass(new AddConsoleCommandPass(ContainerCommandLoader::class));

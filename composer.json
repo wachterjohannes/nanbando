@@ -37,5 +37,8 @@
         "psr-4": {
             "Nanbando\\Tests\\": "tests/"
         }
-    }
+    },
+    "bin": [
+        "bin/nanbando"
+    ]
 }
