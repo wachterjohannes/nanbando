@@ -34,6 +34,11 @@ class ConsoleContext implements Context
     private $fileContent;
 
     /**
+     * @var string
+     */
+    private $latestFile;
+
+    /**
      * @When /^I run "([^"]*)"$/
      */
     public function iRun(string $argument): void
@@ -182,6 +187,8 @@ EOT;
                 )
             );
         }
+
+        $this->latestFile = $filePath;
     }
 
     /**
@@ -248,6 +255,17 @@ EOT;
                     )
                 );
             }
+        }
+    }
+
+    /**
+     * @Given /^should have following attributes$/
+     */
+    public function shouldHaveFollowingAttributes(TableNode $table)
+    {
+        foreach ($table as $row) {
+            Assert::eq(hash_file('sha224', $this->latestFile), $row['hash']);
+            Assert::eq(filesize($this->latestFile), $row['size']);
         }
     }
 }

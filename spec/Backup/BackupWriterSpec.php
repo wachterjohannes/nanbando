@@ -4,9 +4,9 @@ namespace spec\Nanbando\Backup;
 
 use Nanbando\Backup\BackupArchive;
 use Nanbando\Backup\BackupWriter;
-use Nanbando\Backup\TarFactory;
 use Nanbando\Clock\Clock;
 use Nanbando\Console\SectionOutputFormatter;
+use Nanbando\Tar\TarFactory;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use splitbrain\PHPArchive\Tar;

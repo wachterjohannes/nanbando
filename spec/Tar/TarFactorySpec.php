@@ -1,8 +1,8 @@
 <?php
 
-namespace spec\Nanbando\Backup;
+namespace spec\Nanbando\Tar;
 
-use Nanbando\Backup\TarFactory;
+use Nanbando\Tar\TarFactory;
 use PhpSpec\ObjectBehavior;
 use splitbrain\PHPArchive\Tar;
 

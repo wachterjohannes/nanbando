@@ -4,6 +4,7 @@ namespace Nanbando\Backup;
 
 use Nanbando\Clock\ClockInterface;
 use Nanbando\Console\OutputFormatter;
+use Nanbando\File\FileHasher;
 use Nanbando\Script\ScriptInterface;
 use Nanbando\Script\ScriptRegistry;
 use Nanbando\TempFileManager\TempFileManagerInterface;
@@ -31,6 +32,11 @@ class BackupRunner
     private $tempFileManager;
 
     /**
+     * @var FileHasher
+     */
+    private $fileHasher;
+
+    /**
      * @var OutputFormatter
      */
     private $output;
@@ -40,6 +46,7 @@ class BackupRunner
         ScriptRegistry $scriptRegistry,
         BackupWriter $backupWriter,
         TempFileManagerInterface $tempFileManager,
+        FileHasher $fileHasher,
         OutputFormatter $output
     ) {
         $this->clock = $clock;
@@ -47,6 +54,7 @@ class BackupRunner
         $this->backupWriter = $backupWriter;
         $this->tempFileManager = $tempFileManager;
         $this->output = $output;
+        $this->fileHasher = $fileHasher;
     }
 
     public function run(string $label = null, string $message = null): BackupArchiveInterface
@@ -61,7 +69,7 @@ class BackupRunner
             ]
         );
 
-        $backupArchive = new BackupArchive();
+        $backupArchive = new BackupArchive($this->fileHasher);
         $backupArchive->set('label', $label ?: '');
         $backupArchive->set('message', $message ?: '');
         $backupArchive->set('started', $started);

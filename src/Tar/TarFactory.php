@@ -1,6 +1,6 @@
 <?php
 
-namespace Nanbando\Backup;
+namespace Nanbando\Tar;
 
 use splitbrain\PHPArchive\Tar;
 

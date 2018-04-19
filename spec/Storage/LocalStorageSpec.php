@@ -36,7 +36,7 @@ class LocalStorageSpec extends ObjectBehavior
 
         $finderFactory->create()->willReturn($finder);
 
-        $finder->name('20180415-202700')->willReturn($finder)->shouldBeCalled();
+        $finder->name('20180415-202700.tar.gz')->willReturn($finder)->shouldBeCalled();
         $finder->count()->willReturn(true)->shouldBeCalled();
 
         $this->listFiles()->shouldBeArchiveInfos(['20180415-202700']);
@@ -48,7 +48,7 @@ class LocalStorageSpec extends ObjectBehavior
     ) {
         $finderFactory->create()->willReturn($finder);
 
-        $finder->name('20180415-202700')->willReturn($finder)->shouldBeCalled();
+        $finder->name('20180415-202700.tar.gz')->willReturn($finder)->shouldBeCalled();
         $finder->count()->willReturn(true)->shouldBeCalled();
 
         $this->get('20180415-202700')->shouldBeArchiveInfo('20180415-202700', true);
@@ -60,7 +60,7 @@ class LocalStorageSpec extends ObjectBehavior
     ) {
         $finderFactory->create()->willReturn($finder);
 
-        $finder->name('20180415-202700')->willReturn($finder)->shouldBeCalled();
+        $finder->name('20180415-202700.tar.gz')->willReturn($finder)->shouldBeCalled();
         $finder->count()->willReturn(true)->shouldBeCalled();
 
         $this->exists('20180415-202700')->shouldBe(true);

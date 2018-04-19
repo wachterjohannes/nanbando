@@ -8,6 +8,7 @@ use Nanbando\Backup\BackupWriter;
 use Nanbando\Clock\ClockInterface;
 use Nanbando\Console\OutputFormatter;
 use Nanbando\Console\SectionOutputFormatter;
+use Nanbando\File\FileHasher;
 use Nanbando\Script\ScriptInterface;
 use Nanbando\Script\ScriptRegistry;
 use Nanbando\TempFileManager\TempFileManagerInterface;
@@ -22,12 +23,13 @@ class BackupRunnerSpec extends ObjectBehavior
         ScriptRegistry $scriptRegistry,
         BackupWriter $backupWriter,
         TempFileManagerInterface $tempFileManager,
+        FileHasher $fileHasher,
         OutputFormatter $output,
         \DateTimeImmutable $dateTime
     ) {
         $clock->getDateTime()->willReturn($dateTime);
 
-        $this->beConstructedWith($clock, $scriptRegistry, $backupWriter, $tempFileManager, $output);
+        $this->beConstructedWith($clock, $scriptRegistry, $backupWriter, $tempFileManager, $fileHasher, $output);
     }
 
     public function it_is_initializable()

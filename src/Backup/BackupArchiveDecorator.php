@@ -7,48 +7,48 @@ class BackupArchiveDecorator implements BackupArchiveInterface
     /**
      * @var BackupArchiveInterface
      */
-    private $innerBackupArchive;
+    private $innerArchive;
 
     /**
      * @var string
      */
     private $scriptName;
 
-    public function __construct(string $scriptName, BackupArchiveInterface $innerBackupArchive)
+    public function __construct(string $scriptName, BackupArchiveInterface $innerArchive)
     {
         $this->scriptName = $scriptName;
-        $this->innerBackupArchive = $innerBackupArchive;
+        $this->innerArchive = $innerArchive;
     }
 
     public function storeFile(string $name, string $path): void
     {
-        $this->innerBackupArchive->storeFile(sprintf('%s/%s', $this->scriptName, $name), $path);
+        $this->innerArchive->storeFile(sprintf('%s/%s', $this->scriptName, $name), $path);
     }
 
     public function getFiles(): array
     {
-        return $this->innerBackupArchive->getFiles();
+        return $this->innerArchive->getFiles();
     }
 
     public function set(string $name, $value): void
     {
-        $this->innerBackupArchive->set(sprintf('%s.%s', $this->scriptName, $name), $value);
+        $this->innerArchive->set(sprintf('%s.%s', $this->scriptName, $name), $value);
     }
 
     public function get(string $name)
     {
-        return $this->innerBackupArchive->get(sprintf('%s.%s', $this->scriptName, $name));
+        return $this->innerArchive->get(sprintf('%s.%s', $this->scriptName, $name));
     }
 
     public function getWithDefault(string $name, $default)
     {
-        return $this->innerBackupArchive->getWithDefault(sprintf('%s.%s', $this->scriptName, $name), $default);
+        return $this->innerArchive->getWithDefault(sprintf('%s.%s', $this->scriptName, $name), $default);
     }
 
     public function all(): array
     {
         $result = [];
-        foreach ($this->innerBackupArchive->all() as $key => $value) {
+        foreach ($this->innerArchive->all() as $key => $value) {
             $prefix = $this->scriptName . '.';
             if ($prefix === substr($key, 0, strlen($prefix))) {
                 $result[substr($key, strlen($prefix))] = $value;

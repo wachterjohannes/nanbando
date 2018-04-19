@@ -4,6 +4,7 @@ namespace Nanbando\Backup;
 
 use Nanbando\Clock\Clock;
 use Nanbando\Console\SectionOutputFormatter;
+use Nanbando\Tar\TarFactory;
 use splitbrain\PHPArchive\Archive;
 use Symfony\Component\Filesystem\Filesystem;
 use Webmozart\PathUtil\Path;

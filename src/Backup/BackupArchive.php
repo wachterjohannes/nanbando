@@ -2,6 +2,7 @@
 
 namespace Nanbando\Backup;
 
+use Nanbando\File\FileHasher;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -14,12 +15,18 @@ class BackupArchive implements BackupArchiveInterface
     private $files = [];
 
     /**
+     * @var FileHasher
+     */
+    private $fileHasher;
+
+    /**
      * @var ParameterBagInterface
      */
     private $parameters;
 
-    public function __construct(?ParameterBagInterface $parameterBag = null)
+    public function __construct(FileHasher $fileHasher, ?ParameterBagInterface $parameterBag = null)
     {
+        $this->fileHasher = $fileHasher;
         $this->parameters = $parameterBag ?: new ParameterBag();
     }
 
@@ -74,7 +81,7 @@ class BackupArchive implements BackupArchiveInterface
             'creationTime' => $file->getCTime(),
             'modificationTime' => $file->getMTime(),
             'size' => $file->getSize(),
-            'hash' => hash_file('sha224', $file->getRealPath()),
+            'hash' => $this->fileHasher->hash($file->getRealPath()),
         ];
     }
 }

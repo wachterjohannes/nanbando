@@ -52,6 +52,6 @@ class LocalStorage
 
     public function exists(string $name): bool
     {
-        return $this->finderFactory->create()->name($name)->count() > 0;
+        return $this->finderFactory->create()->name($name . '.tar.gz')->count() > 0;
     }
 }

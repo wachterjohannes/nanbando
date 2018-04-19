@@ -4,10 +4,17 @@ namespace spec\Nanbando\Backup;
 
 use Nanbando\Backup\BackupArchive;
 use Nanbando\Backup\BackupArchiveInterface;
+use Nanbando\File\FileHasher;
 use PhpSpec\ObjectBehavior;
 
 class BackupArchiveSpec extends ObjectBehavior
 {
+    public function let(
+        FileHasher $fileHasher
+    ) {
+        $this->beConstructedWith($fileHasher);
+    }
+
     public function it_is_initializable()
     {
         $this->shouldHaveType(BackupArchive::class);
