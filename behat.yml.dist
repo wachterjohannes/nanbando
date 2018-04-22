@@ -1,8 +1,8 @@
 imports:
-    - tests/Behat/Resources/suites.yml
+    - tests/Behat/Resources/config/suites.yml
 
 default:
     extensions:
         FriendsOfBehat\ContextServiceExtension:
             imports:
-                - tests/Behat/Resources/services.xml
+                - tests/Behat/Resources/config/services.xml

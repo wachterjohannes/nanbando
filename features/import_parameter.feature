@@ -5,16 +5,15 @@ Feature: Import files
     I want to import files
 
     Background:
-        When I am in the resources directory
-        And I cleanup the resources directory
-
-    Scenario: When importing parameter the the parameter should be present
-        When There exists following "backup.php" file
+        Given the resources directory is clean
+        And there exists following "backup.php" file
           """
             import('parameters.yml');
           """
+
+    Scenario: When importing parameter the the parameter should be present
         And I run "bin/nanbando debug:parameter"
-        And I should see following parameters
+        Then I should see following parameters
             | name  | value       |
             | test1 | "my-test-1" |
             | test2 | "my-test-2" |

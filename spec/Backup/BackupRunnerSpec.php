@@ -8,13 +8,11 @@ use Nanbando\Backup\BackupWriter;
 use Nanbando\Clock\ClockInterface;
 use Nanbando\Console\OutputFormatter;
 use Nanbando\Console\SectionOutputFormatter;
-use Nanbando\File\FileHasher;
 use Nanbando\Script\ScriptInterface;
 use Nanbando\Script\ScriptRegistry;
 use Nanbando\TempFileManager\TempFileManagerInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Webmozart\Assert\Assert;
 
 class BackupRunnerSpec extends ObjectBehavior
 {
@@ -23,13 +21,12 @@ class BackupRunnerSpec extends ObjectBehavior
         ScriptRegistry $scriptRegistry,
         BackupWriter $backupWriter,
         TempFileManagerInterface $tempFileManager,
-        FileHasher $fileHasher,
         OutputFormatter $output,
         \DateTimeImmutable $dateTime
     ) {
         $clock->getDateTime()->willReturn($dateTime);
 
-        $this->beConstructedWith($clock, $scriptRegistry, $backupWriter, $tempFileManager, $fileHasher, $output);
+        $this->beConstructedWith($clock, $scriptRegistry, $backupWriter, $tempFileManager, $output);
     }
 
     public function it_is_initializable()
@@ -44,7 +41,8 @@ class BackupRunnerSpec extends ObjectBehavior
         OutputFormatter $output,
         ScriptInterface $script1,
         ScriptInterface $script2,
-        SectionOutputFormatter $sectionFormatter
+        SectionOutputFormatter $sectionFormatter,
+        BackupArchiveInterface $backupArchive
     ) {
         $output->headline(Argument::cetera())->shouldBeCalled();
         $output->list(Argument::cetera())->shouldBeCalled();
@@ -56,32 +54,16 @@ class BackupRunnerSpec extends ObjectBehavior
         $script1->backup(Argument::type(BackupArchiveInterface::class), $sectionFormatter)->shouldBeCalled();
         $script2->backup(Argument::type(BackupArchiveInterface::class), $sectionFormatter)->shouldBeCalled();
 
-        $backupWriter->write(Argument::type(\DateTimeImmutable::class), Argument::type(BackupArchiveInterface::class), $sectionFormatter)
+        $backupWriter->write(Argument::type(\DateTimeImmutable::class), $backupArchive, $sectionFormatter)
             ->shouldBeCalled()
             ->willReturn('20180101-010100');
 
         $tempFileManager->cleanup($sectionFormatter)->shouldBeCalled();
 
-        $this->run()->shouldBeBackupArchive();
-    }
+        $backupArchive->set(Argument::cetera())->shouldBeCalled();
+        $backupArchive->getWithDefault('label', '')->willReturn('');
+        $backupArchive->getWithDefault('message', '')->willReturn('');
 
-    public function getMatchers(): array
-    {
-        return [
-            'beBackupArchive' => function (BackupArchiveInterface $subject, string $label = '', string $message = '') {
-                $parameter = $subject->all();
-
-                Assert::keyExists($parameter, 'label');
-                Assert::eq($parameter['label'], $label);
-
-                Assert::keyExists($parameter, 'message');
-                Assert::eq($parameter['message'], $message);
-
-                Assert::keyExists($parameter, 'started');
-                Assert::keyExists($parameter, 'finished');
-
-                return true;
-            },
-        ];
+        $this->run($backupArchive)->shouldBe($backupArchive);
     }
 }

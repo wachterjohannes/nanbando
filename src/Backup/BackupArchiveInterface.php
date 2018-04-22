@@ -4,7 +4,9 @@ namespace Nanbando\Backup;
 
 interface BackupArchiveInterface
 {
-    public function storeFile(string $name, string $path): void;
+    public function storeFile(string $name, string $path, ?array $metadata = null): void;
+
+    public function storeMetadata(string $name, array $metadata): void;
 
     public function getFiles(): array;
 

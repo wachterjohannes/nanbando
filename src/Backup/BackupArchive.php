@@ -2,7 +2,7 @@
 
 namespace Nanbando\Backup;
 
-use Nanbando\File\FileHasher;
+use Nanbando\File\MetadataFactory;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -12,31 +12,36 @@ class BackupArchive implements BackupArchiveInterface
     /**
      * @var array
      */
-    private $files = [];
+    protected $files = [];
 
     /**
-     * @var FileHasher
+     * @var MetadataFactory
      */
-    private $fileHasher;
+    private $metadataFactory;
 
     /**
      * @var ParameterBagInterface
      */
     private $parameters;
 
-    public function __construct(FileHasher $fileHasher, ?ParameterBagInterface $parameterBag = null)
+    public function __construct(MetadataFactory $metadataFactory, ?ParameterBagInterface $parameterBag = null)
     {
-        $this->fileHasher = $fileHasher;
+        $this->metadataFactory = $metadataFactory;
         $this->parameters = $parameterBag ?: new ParameterBag();
     }
 
-    public function storeFile(string $name, string $path): void
+    public function storeFile(string $name, string $path, ?array $metadata = null): void
     {
         $this->files[$name] = $path;
 
-        $metadata = $this->getWithDefault('metadata', []);
-        $metadata[$name] = $this->getMetadata($path);
-        $this->set('metadata', $metadata);
+        $this->storeMetadata($name, $metadata ?: $this->metadataFactory->create($path));
+    }
+
+    public function storeMetadata(string $name, array $metadata): void
+    {
+        $databaseMetadata = $this->getWithDefault('metadata', []);
+        $databaseMetadata[$name] = $metadata;
+        $this->set('metadata', $databaseMetadata);
     }
 
     public function getFiles(): array
@@ -66,22 +71,5 @@ class BackupArchive implements BackupArchiveInterface
         } catch (ParameterNotFoundException $exception) {
             return $default;
         }
-    }
-
-    protected function getMetadata(string $path): array
-    {
-        $file = new \SplFileInfo($path);
-
-        return [
-            'originalPath' => $path,
-            'filename' => $file->getFilename(),
-            'type' => $file->getType(),
-            'extension' => $file->getExtension(),
-            'accessTime' => $file->getATime(),
-            'creationTime' => $file->getCTime(),
-            'modificationTime' => $file->getMTime(),
-            'size' => $file->getSize(),
-            'hash' => $this->fileHasher->hash($file->getRealPath()),
-        ];
     }
 }

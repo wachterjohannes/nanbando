@@ -4,15 +4,15 @@ namespace spec\Nanbando\Backup;
 
 use Nanbando\Backup\BackupArchive;
 use Nanbando\Backup\BackupArchiveInterface;
-use Nanbando\File\FileHasher;
+use Nanbando\File\MetadataFactory;
 use PhpSpec\ObjectBehavior;
 
 class BackupArchiveSpec extends ObjectBehavior
 {
     public function let(
-        FileHasher $fileHasher
+        MetadataFactory $metadataFactory
     ) {
-        $this->beConstructedWith($fileHasher);
+        $this->beConstructedWith($metadataFactory);
     }
 
     public function it_is_initializable()

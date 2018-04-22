@@ -15,11 +15,11 @@ class DebugParameterCommand extends Command
      */
     private $container;
 
-    public function __construct(Container $container)
+    public function __construct(Container $backupRunner)
     {
         parent::__construct();
 
-        $this->container = $container;
+        $this->container = $backupRunner;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

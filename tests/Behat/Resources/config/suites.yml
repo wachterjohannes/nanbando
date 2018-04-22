@@ -2,7 +2,10 @@ default:
     suites:
         console:
             contexts_services:
+                - Nanbando\Tests\Behat\BackupFileContext
                 - Nanbando\Tests\Behat\ConsoleContext
+                - Nanbando\Tests\Behat\DataFixturesContext
+                - Nanbando\Tests\Behat\FileContext
 
             filters:
                 tags: "@console"

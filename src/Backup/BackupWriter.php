@@ -43,11 +43,13 @@ class BackupWriter
 
         $fileName = $dateTime->format('Ymd-His');
         $label = $backupArchive->get('label');
-        if ('' !== $label) {
+        if ($label && '' !== $label) {
             // TODO slugify label
 
             $fileName = sprintf('%s_%s', $fileName, $label);
         }
+
+        $backupArchive->set('name', $fileName);
 
         $tar = $this->factory->create();
         $tar->setCompression(9, Archive::COMPRESS_AUTO);

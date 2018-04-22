@@ -63,6 +63,8 @@ class BackupWriterSpec extends ObjectBehavior
 
         $filesystem->dumpFile('/tmp/20180405-202000.json', $databaseContent)->shouldBeCalled();
 
+        $backupArchive->set('name', '20180405-202000')->shouldBeCalled();
+
         $this->write($dateTime, $backupArchive, $outputFormatter)->shouldEqual('20180405-202000');
     }
 
@@ -90,10 +92,12 @@ class BackupWriterSpec extends ObjectBehavior
 
         $filesystem->dumpFile('/tmp/20180405-202000.json', json_encode([]))->shouldBeCalled();
 
+        $backupArchive->set('name', '20180405-202000')->shouldBeCalled();
+
         $this->write($dateTime, $backupArchive, $outputFormatter);
     }
 
-    public function it_should_add_tag_to_filename(
+    public function it_should_add_label_to_filename(
         Filesystem $filesystem,
         Tar $tar,
         BackupArchive $backupArchive,
@@ -106,15 +110,45 @@ class BackupWriterSpec extends ObjectBehavior
         $backupArchive->getFiles()->willReturn([]);
         $backupArchive->all()->willReturn([]);
 
-        $backupArchive->get('label')->willReturn('testtag');
+        $backupArchive->get('label')->willReturn('testlabel');
 
-        $tar->create('/tmp/20180405-202000_testtag.tar.gz')->shouldBeCalled();
+        $tar->create('/tmp/20180405-202000_testlabel.tar.gz')->shouldBeCalled();
         $tar->setCompression(9, -1)->shouldBeCalled();
         $tar->addFile(Argument::cetera())->shouldNotBeCalled();
         $tar->addData('database.json', json_encode([]))->shouldBeCalled();
         $tar->close()->shouldBeCalled();
 
-        $filesystem->dumpFile('/tmp/20180405-202000_testtag.json', json_encode([]))->shouldBeCalled();
+        $filesystem->dumpFile('/tmp/20180405-202000_testlabel.json', json_encode([]))->shouldBeCalled();
+
+        $backupArchive->set('name', '20180405-202000_testlabel')->shouldBeCalled();
+
+        $this->write($dateTime, $backupArchive, $outputFormatter);
+    }
+
+    public function it_should_add_ignore_null_label(
+        Filesystem $filesystem,
+        Tar $tar,
+        BackupArchive $backupArchive,
+        SectionOutputFormatter $outputFormatter,
+        \DateTimeImmutable $dateTime
+    ) {
+        $dateTime->format('Ymd-His')->willReturn('20180405-202000');
+
+        $filesystem->exists('/tmp')->willReturn(true);
+        $backupArchive->getFiles()->willReturn([]);
+        $backupArchive->all()->willReturn([]);
+
+        $backupArchive->get('label')->willReturn(null);
+
+        $tar->create('/tmp/20180405-202000.tar.gz')->shouldBeCalled();
+        $tar->setCompression(9, -1)->shouldBeCalled();
+        $tar->addFile(Argument::cetera())->shouldNotBeCalled();
+        $tar->addData('database.json', json_encode([]))->shouldBeCalled();
+        $tar->close()->shouldBeCalled();
+
+        $filesystem->dumpFile('/tmp/20180405-202000.json', json_encode([]))->shouldBeCalled();
+
+        $backupArchive->set('name', '20180405-202000')->shouldBeCalled();
 
         $this->write($dateTime, $backupArchive, $outputFormatter);
     }

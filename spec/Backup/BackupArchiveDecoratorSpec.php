@@ -27,9 +27,25 @@ class BackupArchiveDecoratorSpec extends ObjectBehavior
     public function it_should_add_script_name_on_store_file(
         BackupArchiveInterface $backupArchive
     ) {
-        $backupArchive->storeFile('test/test.json', '/var/test.json')->shouldBeCalled();
+        $backupArchive->storeFile('test/test.json', '/var/test.json', null)->shouldBeCalled();
 
         $this->storeFile('test.json', '/var/test.json');
+    }
+
+    public function it_should_add_script_name_on_store_file_pass_given_metadata(
+        BackupArchiveInterface $backupArchive
+    ) {
+        $backupArchive->storeFile('test/test.json', '/var/test.json', ['hash' => '123456'])->shouldBeCalled();
+
+        $this->storeFile('test.json', '/var/test.json', ['hash' => '123456']);
+    }
+
+    public function it_should_add_script_name_on_store_metadata(
+        BackupArchiveInterface $backupArchive
+    ) {
+        $backupArchive->storeMetadata('test/test.json', ['hash' => '123456'])->shouldBeCalled();
+
+        $this->storeMetadata('test.json', ['hash' => '123456']);
     }
 
     public function it_should_add_script_name_on_set_parameter(

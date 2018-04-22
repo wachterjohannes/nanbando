@@ -2,6 +2,9 @@
 
 namespace Nanbando\Storage;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+
 class ArchiveInfo
 {
     /**
@@ -60,5 +63,12 @@ class ArchiveInfo
     public function isFetched(): bool
     {
         return $this->fetched;
+    }
+
+    public function openDatabase(): ParameterBagInterface
+    {
+        $parameter = json_decode(file_get_contents($this->getDatabasePath()), true);
+
+        return new ParameterBag($parameter);
     }
 }

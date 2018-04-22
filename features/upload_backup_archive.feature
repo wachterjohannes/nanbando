@@ -5,18 +5,18 @@ Feature: Upload backup archive
     I want to upload my backup-archives to a save storage
 
     Background:
-        When I am in the resources directory
-        And I cleanup the resources directory
-        And I extract "backups.zip" to "var/backups"
-        But There exists following "backup.php" file
+        Given the resources directory is clean
+        And there exists following "backup.php" file
           """
             storage('test', \Nanbando\Storage\DirectoryStorageAdapter::create(get('%cwd%/var/storage/test')));
           """
+        But the backup-archive "20180422-145100" exists
+        And the backup-archive "20180422-151000" exists in the folder "var/storage/test"
 
     Scenario: The files should be uploaded when running the "push-to" command
         When I run "bin/nanbando push-to test"
         Then I should see "Push to "test" started", "Push finished"
-        And The file "var/storage/test/20180405-202000.tar.gz" should exists
-        And The file "var/storage/test/20180405-202000.json" should exists
-        And The file "var/storage/test/20180412-202000.tar.gz" should exists
-        And The file "var/storage/test/20180412-202000.json" should exists
+        And The file "var/storage/test/20180422-145100.tar.gz" should exists
+        And The file "var/storage/test/20180422-145100.json" should exists
+        And The file "var/storage/test/20180422-151000.tar.gz" should exists
+        And The file "var/storage/test/20180422-151000.json" should exists

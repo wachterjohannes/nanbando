@@ -20,9 +20,14 @@ class BackupArchiveDecorator implements BackupArchiveInterface
         $this->innerArchive = $innerArchive;
     }
 
-    public function storeFile(string $name, string $path): void
+    public function storeFile(string $name, string $path, ?array $metadata = null): void
     {
-        $this->innerArchive->storeFile(sprintf('%s/%s', $this->scriptName, $name), $path);
+        $this->innerArchive->storeFile(sprintf('%s/%s', $this->scriptName, $name), $path, $metadata);
+    }
+
+    public function storeMetadata(string $name, array $metadata): void
+    {
+        $this->innerArchive->storeMetadata(sprintf('%s/%s', $this->scriptName, $name), $metadata);
     }
 
     public function getFiles(): array

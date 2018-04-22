@@ -31,6 +31,15 @@
         <service id="Nanbando\Clock\Clock"/>
         <service id="Nanbando\File\FileHasher"/>
 
+        <service id="Nanbando\File\MetadataFactory">
+            <argument type="service" id="Nanbando\File\FileHasher"/>
+        </service>
+
+        <service id="Nanbando\Backup\BackupArchiveFactory">
+            <argument type="service" id="Nanbando\File\MetadataFactory"/>
+            <argument type="service" id="Nanbando\Storage\LocalStorage"/>
+        </service>
+
         <service id="Nanbando\Script\ScriptRegistry">
             <argument type="collection"/>
         </service>
@@ -64,7 +73,6 @@
             <argument type="service" id="Nanbando\Script\ScriptRegistry"/>
             <argument type="service" id="Nanbando\Backup\BackupWriter"/>
             <argument type="service" id="Nanbando\TempFileManager\TempFileManager"/>
-            <argument type="service" id="Nanbando\File\FileHasher"/>
             <argument type="service" id="Nanbando\Console\OutputFormatter"/>
         </service>
 
@@ -92,8 +100,16 @@
 
         <service id="Nanbando\Console\Command\BackupCommand">
             <argument type="service" id="Nanbando\Backup\BackupRunner"/>
+            <argument type="service" id="Nanbando\Backup\BackupArchiveFactory"/>
 
             <tag name="console.command" command="backup"/>
+        </service>
+
+        <service id="Nanbando\Console\Command\DifferentialBackupCommand">
+            <argument type="service" id="Nanbando\Backup\BackupRunner"/>
+            <argument type="service" id="Nanbando\Backup\BackupArchiveFactory"/>
+
+            <tag name="console.command" command="backup:differential"/>
         </service>
 
         <service id="Nanbando\Console\Command\RestoreCommand">

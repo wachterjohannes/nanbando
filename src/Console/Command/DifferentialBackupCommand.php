@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class BackupCommand extends Command
+class DifferentialBackupCommand extends Command
 {
     /**
      * @var BackupRunner
@@ -32,13 +32,15 @@ class BackupCommand extends Command
 
     protected function configure()
     {
+        $this->addArgument('parent', InputArgument::REQUIRED);
         $this->addArgument('label', InputArgument::OPTIONAL);
         $this->addOption('message', 'm', InputOption::VALUE_REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $backupArchive = $this->factory->create();
+        $backupArchive = $this->factory->createDifferential($input->getArgument('parent'));
+
         $backupArchive->set('label', $input->getArgument('label'));
         $backupArchive->set('message', $input->getOption('message'));
 

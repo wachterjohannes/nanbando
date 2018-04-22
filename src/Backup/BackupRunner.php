@@ -4,7 +4,6 @@ namespace Nanbando\Backup;
 
 use Nanbando\Clock\ClockInterface;
 use Nanbando\Console\OutputFormatter;
-use Nanbando\File\FileHasher;
 use Nanbando\Script\ScriptInterface;
 use Nanbando\Script\ScriptRegistry;
 use Nanbando\TempFileManager\TempFileManagerInterface;
@@ -32,11 +31,6 @@ class BackupRunner
     private $tempFileManager;
 
     /**
-     * @var FileHasher
-     */
-    private $fileHasher;
-
-    /**
      * @var OutputFormatter
      */
     private $output;
@@ -46,7 +40,6 @@ class BackupRunner
         ScriptRegistry $scriptRegistry,
         BackupWriter $backupWriter,
         TempFileManagerInterface $tempFileManager,
-        FileHasher $fileHasher,
         OutputFormatter $output
     ) {
         $this->clock = $clock;
@@ -54,24 +47,20 @@ class BackupRunner
         $this->backupWriter = $backupWriter;
         $this->tempFileManager = $tempFileManager;
         $this->output = $output;
-        $this->fileHasher = $fileHasher;
     }
 
-    public function run(string $label = null, string $message = null): BackupArchiveInterface
+    public function run(BackupArchiveInterface $backupArchive): BackupArchiveInterface
     {
         $started = $this->clock->getDateTime();
 
         $this->output->headline('Backup started at %s', $started);
         $this->output->list(
             [
-                'label' => $label ?: '',
-                'message' => $message ?: '',
+                'label' => $backupArchive->getWithDefault('label', ''),
+                'message' => $backupArchive->getWithDefault('message', ''),
             ]
         );
 
-        $backupArchive = new BackupArchive($this->fileHasher);
-        $backupArchive->set('label', $label ?: '');
-        $backupArchive->set('message', $message ?: '');
         $backupArchive->set('started', $started);
         foreach ($this->scriptManager->get() as $name => $script) {
             $this->runScript(new BackupArchiveDecorator($name, $backupArchive), $name, $script);
@@ -101,7 +90,7 @@ class BackupRunner
         $sectionOutput->checkmark('Executing script %s', $name);
     }
 
-    protected function writeArchive(\DateTimeImmutable $started, BackupArchive $backupArchive): string
+    protected function writeArchive(\DateTimeImmutable $started, BackupArchiveInterface $backupArchive): string
     {
         $sectionOutput = $this->output->section();
         $sectionOutput->headline('Generating backup archive');

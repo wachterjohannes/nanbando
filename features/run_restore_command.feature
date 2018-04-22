@@ -5,16 +5,18 @@ Feature: Run restore command
     I want to run a restore when I call the application with the "restore" command
 
     Background:
-        When I am in the resources directory
-        And I cleanup the resources directory
-        And I extract "backups.zip" to "var/backups"
-        And There exists following "backup.php" file
+        Given the resources directory is clean
+        And there exists following "backup.php" file
           """
             attach('uploads', \Nanbando\Script\DirectoryScript::create(get('%cwd%/uploads')));
           """
+        And the backup-archive "20180422-145100" exists with following files
+            | name                          |
+            | uploads/84-0-frankenstein.txt |
+            | uploads/pg345-dracula.txt     |
 
     Scenario: The restored directory file should contain all the files
-        When I run "bin/nanbando restore 20180405-202000"
+        When I run "bin/nanbando restore 20180422-145100"
         Then I should see "Restore started", "Restore finished"
         And The file "uploads/84-0-frankenstein.txt" should exists
         And should have following attributes
