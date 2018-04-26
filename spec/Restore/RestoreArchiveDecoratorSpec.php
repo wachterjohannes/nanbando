@@ -19,6 +19,11 @@ class RestoreArchiveDecoratorSpec extends ObjectBehavior
         $this->shouldHaveType(RestoreArchiveDecorator::class);
     }
 
+    public function it_should_implement_restore_archive_interface()
+    {
+        $this->shouldBeAnInstanceOf(RestoreArchiveInterface::class);
+    }
+
     public function it_should_filter_metadata(
         RestoreArchiveInterface $innerArchive
     ) {

@@ -35,7 +35,7 @@ class BackupArchiveFactory
 
         $backupArchive = new DifferentialBackupArchive($parentDatabase, $this->metadataFactory, $this->create());
 
-        $backupArchive->set('mode', 'differential');
+        $backupArchive->set('mode', BackupArchiveInterface::BACKUP_MODE_DIFFERENTIAL);
         $backupArchive->set('parent', $parent);
 
         return $backupArchive;

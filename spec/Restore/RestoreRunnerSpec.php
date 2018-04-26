@@ -6,7 +6,6 @@ use Nanbando\Clock\ClockInterface;
 use Nanbando\Console\OutputFormatter;
 use Nanbando\Console\SectionOutputFormatter;
 use Nanbando\Restore\RestoreArchiveInterface;
-use Nanbando\Restore\RestoreReader;
 use Nanbando\Restore\RestoreRunner;
 use Nanbando\Script\ScriptInterface;
 use Nanbando\Script\ScriptRegistry;
@@ -19,14 +18,13 @@ class RestoreRunnerSpec extends ObjectBehavior
     public function let(
         ClockInterface $clock,
         ScriptRegistry $scriptRegistry,
-        RestoreReader $restoreReader,
         TempFileManagerInterface $tempFileManager,
         OutputFormatter $output,
         \DateTimeImmutable $dateTime
     ) {
         $clock->getDateTime()->willReturn($dateTime);
 
-        $this->beConstructedWith($clock, $scriptRegistry, $restoreReader, $tempFileManager, $output);
+        $this->beConstructedWith($clock, $scriptRegistry, $tempFileManager, $output);
     }
 
     public function it_is_initializable()
@@ -35,9 +33,7 @@ class RestoreRunnerSpec extends ObjectBehavior
     }
 
     public function it_should_get_restore_scripts_and_run_them(
-        ClockInterface $clock,
         ScriptRegistry $scriptRegistry,
-        RestoreReader $restoreReader,
         TempFileManagerInterface $tempFileManager,
         OutputFormatter $output,
         ScriptInterface $script1,
@@ -55,10 +51,8 @@ class RestoreRunnerSpec extends ObjectBehavior
         $script1->restore(Argument::type(RestoreArchiveInterface::class), $sectionFormatter)->shouldBeCalled();
         $script2->restore(Argument::type(RestoreArchiveInterface::class), $sectionFormatter)->shouldBeCalled();
 
-        $restoreReader->open('20180419-165900')->willReturn($restoreArchive);
-
         $tempFileManager->cleanup($sectionFormatter)->shouldBeCalled();
 
-        $this->run('20180419-165900');
+        $this->run($restoreArchive);
     }
 }

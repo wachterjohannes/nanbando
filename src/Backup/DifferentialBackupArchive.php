@@ -36,8 +36,7 @@ class DifferentialBackupArchive implements BackupArchiveInterface
     {
         $metadata = $metadata ?: $this->metadataFactory->create($path);
         if ($parentMetadata = $this->findParentMetadata($name, $metadata)) {
-            // FIXME as soon as fixtures are implemented
-            $parentMetadata['archive'] = $this->parentDatabase->has('name') ? $this->parentDatabase->get('name') : 'xxx';
+            $parentMetadata['archive'] = $this->parentDatabase->get('name');
             $this->innerArchive->storeMetadata($name, $parentMetadata);
 
             return;

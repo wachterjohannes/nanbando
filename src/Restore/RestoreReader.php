@@ -2,6 +2,7 @@
 
 namespace Nanbando\Restore;
 
+use Nanbando\Backup\BackupArchiveInterface;
 use Nanbando\Storage\LocalStorage;
 use Nanbando\Tar\TarFactory;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -38,13 +39,21 @@ class RestoreReader
             throw new \RuntimeException('Archive "' . $name . '" does not exists in local storage.');
         }
 
-        $database = json_decode(file_get_contents($archive->getDatabasePath()), true);
+        $database = new ParameterBag(json_decode(file_get_contents($archive->getDatabasePath()), true));
 
-        return new RestoreArchive(
+        $restoreArchive = new RestoreArchive(
             $archive->getArchivePath(),
             $this->factory->create(),
-            new ParameterBag($database),
+            $database,
             $this->filesystem
         );
+
+        if ($database->has('mode') && BackupArchiveInterface::BACKUP_MODE_DIFFERENTIAL === $database->get('mode')) {
+            $parent = $this->open($database->get('parent'));
+
+            return new DifferentialRestoreArchive($restoreArchive, $parent);
+        }
+
+        return $restoreArchive;
     }
 }

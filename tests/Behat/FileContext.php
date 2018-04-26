@@ -171,6 +171,19 @@ class FileContext implements Context
     }
 
     /**
+     * @Given /^The following files should exists$/
+     */
+    public function theFollowingFilesShouldExists(TableNode $table)
+    {
+        foreach ($table as $row) {
+            $path = Path::join($this->workingDirectory, $row['name']);
+            Assert::fileExists($path);
+            Assert::eq(hash_file('sha224', $path), $row['hash']);
+            Assert::eq(filesize($path), $row['size']);
+        }
+    }
+
+    /**
      * @Given /^I cleanup the backup directory$/
      * @Given /^I cleanup the directory "([^"]*)"$/
      */

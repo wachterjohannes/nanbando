@@ -21,11 +21,6 @@ class RestoreRunner
     private $scriptRegistry;
 
     /**
-     * @var RestoreReader
-     */
-    private $restoreReader;
-
-    /**
      * @var TempFileManagerInterface
      */
     private $tempFileManager;
@@ -38,22 +33,18 @@ class RestoreRunner
     public function __construct(
         ClockInterface $clock,
         ScriptRegistry $scriptRegistry,
-        RestoreReader $restoreReader,
         TempFileManagerInterface $tempFileManager,
         OutputFormatter $output
     ) {
         $this->clock = $clock;
         $this->scriptRegistry = $scriptRegistry;
-        $this->restoreReader = $restoreReader;
         $this->tempFileManager = $tempFileManager;
         $this->output = $output;
     }
 
-    public function run(string $name): void
+    public function run(RestoreArchiveInterface $restoreArchive): void
     {
         $started = $this->clock->getDateTime();
-
-        $restoreArchive = $this->restoreReader->open($name);
 
         $this->output->headline('Restore started at %s', $started);
         $this->output->list(

@@ -3,6 +3,8 @@
 namespace spec\Nanbando\Console\Command;
 
 use Nanbando\Console\Command\RestoreCommand;
+use Nanbando\Restore\RestoreArchiveInterface;
+use Nanbando\Restore\RestoreReader;
 use Nanbando\Restore\RestoreRunner;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -14,9 +16,10 @@ class RestoreCommandSpec extends ObjectBehavior
 {
     public function let(
         RestoreRunner $restoreRunner,
+        RestoreReader $restoreReader,
         InputInterface $input
     ) {
-        $this->beConstructedWith($restoreRunner);
+        $this->beConstructedWith($restoreRunner, $restoreReader);
 
         $input->bind(Argument::cetera())->willReturn(null);
         $input->isInteractive()->willReturn(null);
@@ -37,11 +40,15 @@ class RestoreCommandSpec extends ObjectBehavior
     public function it_should_run_restore(
         InputInterface $input,
         OutputInterface $output,
-        RestoreRunner $restoreRunner
+        RestoreRunner $restoreRunner,
+        RestoreReader $restoreReader,
+        RestoreArchiveInterface $restoreArchive
     ) {
         $input->getArgument('file')->willReturn('20180419-170300');
 
-        $restoreRunner->run('20180419-170300')->shouldBeCalled();
+        $restoreReader->open('20180419-170300')->willReturn($restoreArchive);
+
+        $restoreRunner->run($restoreArchive)->shouldBeCalled();
 
         $this->run($input, $output);
     }

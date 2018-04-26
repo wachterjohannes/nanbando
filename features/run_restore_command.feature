@@ -18,11 +18,7 @@ Feature: Run restore command
     Scenario: The restored directory file should contain all the files
         When I run "bin/nanbando restore 20180422-145100"
         Then I should see "Restore started", "Restore finished"
-        And The file "uploads/84-0-frankenstein.txt" should exists
-        And should have following attributes
-            | hash                                                     | size   |
-            | 110cf6e796f0f1b7926036369d25499c047798b6c7ba871b24f57119 | 442932 |
-        And The file "uploads/pg345-dracula.txt" should exists
-        And should have following attributes
-            | hash                                                     | size   |
-            | c494c52277bcada86aa142fc6d53e149a7e26d2f8aa9d7f2c72835b7 | 867184 |
+        And The following files should exists
+            | name                          | hash                                                     | size   |
+            | uploads/84-0-frankenstein.txt | 110cf6e796f0f1b7926036369d25499c047798b6c7ba871b24f57119 | 442932 |
+            | uploads/pg345-dracula.txt     | c494c52277bcada86aa142fc6d53e149a7e26d2f8aa9d7f2c72835b7 | 867184 |

@@ -79,7 +79,6 @@
         <service id="Nanbando\Restore\RestoreRunner">
             <argument type="service" id="Nanbando\Clock\Clock"/>
             <argument type="service" id="Nanbando\Script\ScriptRegistry"/>
-            <argument type="service" id="Nanbando\Restore\RestoreReader"/>
             <argument type="service" id="Nanbando\TempFileManager\TempFileManager"/>
             <argument type="service" id="Nanbando\Console\OutputFormatter"/>
         </service>
@@ -114,6 +113,7 @@
 
         <service id="Nanbando\Console\Command\RestoreCommand">
             <argument type="service" id="Nanbando\Restore\RestoreRunner"/>
+            <argument type="service" id="Nanbando\Restore\RestoreReader"/>
 
             <tag name="console.command" command="restore"/>
         </service>

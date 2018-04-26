@@ -2,6 +2,7 @@
 
 namespace Nanbando\Console\Command;
 
+use Nanbando\Restore\RestoreReader;
 use Nanbando\Restore\RestoreRunner;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,11 +16,17 @@ class RestoreCommand extends Command
      */
     private $restoreRunner;
 
-    public function __construct(RestoreRunner $restoreRunner)
+    /**
+     * @var RestoreReader
+     */
+    private $restoreReader;
+
+    public function __construct(RestoreRunner $restoreRunner, RestoreReader $restoreReader)
     {
         parent::__construct();
 
         $this->restoreRunner = $restoreRunner;
+        $this->restoreReader = $restoreReader;
     }
 
     protected function configure()
@@ -29,6 +36,8 @@ class RestoreCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->restoreRunner->run($input->getArgument('file'));
+        $restoreArchive = $this->restoreReader->open($input->getArgument('file'));
+
+        $this->restoreRunner->run($restoreArchive);
     }
 }
