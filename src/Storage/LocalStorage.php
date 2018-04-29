@@ -54,4 +54,14 @@ class LocalStorage
     {
         return $this->finderFactory->create()->name($name . '.tar.gz')->count() > 0;
     }
+
+    public function size()
+    {
+        $size = 0;
+        foreach ($this->finderFactory->create() as $file) {
+            $size += $file->getSize();
+        }
+
+        return $size;
+    }
 }

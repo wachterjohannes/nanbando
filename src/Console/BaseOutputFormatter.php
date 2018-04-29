@@ -43,7 +43,7 @@ abstract class BaseOutputFormatter
 
     public function warning(string $format, ...$arguments): void
     {
-        $line = sprintf('<warning>' . $format . '</warning>', ...$this->formatValues($arguments));
+        $line = sprintf('<comment>' . $format . '</comment>', ...$this->formatValues($arguments));
 
         $this->output->writeln('');
         $this->output->writeln($line);

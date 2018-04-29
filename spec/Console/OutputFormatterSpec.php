@@ -123,7 +123,7 @@ class OutputFormatterSpec extends ObjectBehavior
         $this->warning('This is a test');
 
         $output->writeln('')->shouldBeCalledTimes(2);
-        $output->writeln('<warning>This is a test</warning>')->shouldBeCalled();
+        $output->writeln('<comment>This is a test</comment>')->shouldBeCalled();
     }
 
     public function it_should_display_warning_and_format_dates(
@@ -132,7 +132,7 @@ class OutputFormatterSpec extends ObjectBehavior
         $this->warning('%s %s', new \DateTime('2018-01-01T01:01:01'), new \DateTimeImmutable('2018-01-01T01:01:01'));
 
         $output->writeln('')->shouldBeCalledTimes(2);
-        $output->writeln('<warning>2018-01-01 01:01:01 2018-01-01 01:01:01</warning>')->shouldBeCalled();
+        $output->writeln('<comment>2018-01-01 01:01:01 2018-01-01 01:01:01</comment>')->shouldBeCalled();
     }
 
     public function it_should_display_warning_and_format_booleans(
@@ -141,7 +141,7 @@ class OutputFormatterSpec extends ObjectBehavior
         $this->warning('%s %s', true, false);
 
         $output->writeln('')->shouldBeCalledTimes(2);
-        $output->writeln('<warning>yes no</warning>')->shouldBeCalled();
+        $output->writeln('<comment>yes no</comment>')->shouldBeCalled();
     }
 
     public function it_should_display_warning_and_format_arrays(
@@ -150,7 +150,7 @@ class OutputFormatterSpec extends ObjectBehavior
         $this->warning('%s', [1, 2, 3]);
 
         $output->writeln('')->shouldBeCalledTimes(2);
-        $output->writeln('<warning>1, 2, 3</warning>')->shouldBeCalled();
+        $output->writeln('<comment>1, 2, 3</comment>')->shouldBeCalled();
     }
 
     public function it_should_display_warning_and_format_strings(
@@ -159,7 +159,7 @@ class OutputFormatterSpec extends ObjectBehavior
         $this->warning('%s', 'test');
 
         $output->writeln('')->shouldBeCalledTimes(2);
-        $output->writeln('<warning>"test"</warning>')->shouldBeCalled();
+        $output->writeln('<comment>"test"</comment>')->shouldBeCalled();
     }
 
     public function it_should_display_list(

@@ -97,6 +97,13 @@
             <argument type="collection"/>
         </service>
 
+        <service id="Nanbando\Cleanup\Cleaner">
+            <argument type="service" id="Nanbando\Console\OutputFormatter"/>
+            <argument type="service" id="Nanbando\Clock\Clock"/>
+            <argument type="service" id="Symfony\Component\Filesystem\Filesystem"/>
+            <argument type="service" id="nanbando.cleanup.strategy" on-invalid="null"/>
+        </service>
+
         <service id="Nanbando\Console\Command\BackupCommand">
             <argument type="service" id="Nanbando\Backup\BackupRunner"/>
             <argument type="service" id="Nanbando\Backup\BackupArchiveFactory"/>
@@ -136,6 +143,13 @@
             <argument type="service" id="service_container"/>
 
             <tag name="console.command" command="debug:parameter"/>
+        </service>
+
+        <service id="Nanbando\Console\Command\CleanupCommand">
+            <argument type="service" id="Nanbando\Cleanup\Cleaner"/>
+            <argument type="service" id="Nanbando\Storage\LocalStorage"/>
+
+            <tag name="console.command" command="cleanup"/>
         </service>
 
         <service id="Nanbando\Console\Command\InitCommand">

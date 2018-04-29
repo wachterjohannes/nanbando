@@ -82,4 +82,14 @@ class ConsoleContext implements Context
             Assert::contains($this->process->getErrorOutput(), $item);
         }
     }
+
+    /**
+     * Only for debugging.
+     *
+     * @Given /^exit$/
+     */
+    public function exit()
+    {
+        exit;
+    }
 }
