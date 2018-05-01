@@ -4,6 +4,7 @@ namespace Nanbando\Backup;
 
 interface BackupArchiveInterface
 {
+    const BACKUP_MODE_FULL = 'full';
     const BACKUP_MODE_DIFFERENTIAL = 'differential';
 
     public function storeFile(string $name, string $path, ?array $metadata = null): void;

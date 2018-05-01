@@ -171,6 +171,17 @@ class FileContext implements Context
     }
 
     /**
+     * @Given /^The file "([^"]*)" should not exists$/
+     */
+    public function theFileShouldNotExists(string $fileName)
+    {
+        $filePath = Path::join($this->workingDirectory, $fileName);
+        Assert::fileNotExists($filePath);
+
+        $this->latestFile = $filePath;
+    }
+
+    /**
      * @Given /^The following files should exists$/
      */
     public function theFollowingFilesShouldExists(TableNode $table)

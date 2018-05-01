@@ -32,6 +32,7 @@ Feature: Run backup command
           | name     | type     | value            |
           | label    | string   |                  |
           | message  | string   |                  |
+          | mode     | string   | full             |
           | started  | datetime | 2018-04-05T20:20 |
           | finished | datetime | 2018-04-05T20:20 |
 
@@ -40,8 +41,9 @@ Feature: Run backup command
         Then The file "var/backups/20180405-202000_testlabel.tar.gz" should exists
         And The file "var/backups/20180405-202000_testlabel.json" should exists
         And The backup-archive "var/backups/20180405-202000_testlabel.tar.gz" should contain following parameters
-          | name  | type   | value     |
-          | label | string | testlabel |
+          | name    | type   | value     |
+          | label   | string | testlabel |
+          | message | string |           |
 
     Scenario: The backup file should contain the message as parameter
         When I run "bin/nanbando backup -m mymessage"
@@ -49,4 +51,5 @@ Feature: Run backup command
         And The file "var/backups/20180405-202000.json" should exists
         And The backup-archive "var/backups/20180405-202000.tar.gz" should contain following parameters
           | name    | type   | value     |
+          | label   | string |           |
           | message | string | mymessage |

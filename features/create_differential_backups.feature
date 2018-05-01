@@ -71,3 +71,9 @@ Feature: Run backup command with differential mode
             | name    | type   | value           |
             | parent  | string | 20180405-202000 |
             | mode    | string | differential    |
+
+    Scenario: Differential backup should remove file from metadata
+        Given the differential backup-archive "20180428-163200" ontop of "20180405-202000" exists
+        When I run "bin/nanbando backup:differential 20180428-163200"
+        Then I should see an error containing "full backup"
+        And The file "var/backups/20180419-205200.tar.gz" should not exists

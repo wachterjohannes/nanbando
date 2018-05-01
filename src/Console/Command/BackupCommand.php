@@ -41,6 +41,7 @@ class BackupCommand extends Command
         $backupArchive = $this->factory->create();
         $backupArchive->set('label', $input->getArgument('label'));
         $backupArchive->set('message', $input->getOption('message'));
+        $backupArchive->set('message', $input->getOption('message'));
 
         $this->backupRunner->run($backupArchive);
     }

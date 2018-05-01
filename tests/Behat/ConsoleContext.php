@@ -72,4 +72,14 @@ class ConsoleContext implements Context
             }
         }
     }
+
+    /**
+     * @Then /^I should see an error containing "([^"]*)"$/
+     */
+    public function iShouldSeeAnErrorWith(string $arguments)
+    {
+        foreach (explode('", "', $arguments) as $item) {
+            Assert::contains($this->process->getErrorOutput(), $item);
+        }
+    }
 }

@@ -68,6 +68,17 @@ class DataFixturesContext implements Context
     }
 
     /**
+     * @Given /^the differential backup\-archive "([^"]*)" ontop of "([^"]*)" exists$/
+     */
+    public function theDifferentialBackupArchiveOntopOfExists(string $archiveName, string $parentArchiveName)
+    {
+        $dateTime = \DateTimeImmutable::createFromFormat('Ymd-His', $archiveName);
+        $this->backupFileContext->iStopTheTimeAt($dateTime->format('Y-m-d H:i'));
+
+        $this->consoleContext->iRun('bin/nanbando backup:differential ' . $parentArchiveName);
+    }
+
+    /**
      * @Given /^the backup\-archive "([^"]*)" exists with following files$/
      */
     public function theBackupArchiveExistsWithFollowingFiles(string $archiveName, TableNode $table)
