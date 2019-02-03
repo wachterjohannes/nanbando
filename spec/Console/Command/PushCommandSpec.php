@@ -2,27 +2,23 @@
 
 namespace spec\Nanbando\Console\Command;
 
-use Nanbando\Console\Command\PushToCommand;
+use Nanbando\Console\Command\PushCommand;
 use Nanbando\Console\OutputFormatter;
-use Nanbando\Storage\RemoteStorage;
-use Nanbando\Storage\StorageRegistry;
+use Nanbando\Storage\Storage;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PushToCommandSpec extends ObjectBehavior
+class PushCommandSpec extends ObjectBehavior
 {
     public function let(
-        StorageRegistry $registry,
+        Storage $storage,
         OutputFormatter $outputFormatter,
-        RemoteStorage $storage,
         InputInterface $input
     ) {
-        $this->beConstructedWith($registry, $outputFormatter);
-
-        $registry->get('test')->willReturn($storage);
+        $this->beConstructedWith($storage, $outputFormatter);
 
         $input->bind(Argument::cetera())->willReturn(null);
         $input->isInteractive()->willReturn(null);
@@ -32,7 +28,7 @@ class PushToCommandSpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType(PushToCommand::class);
+        $this->shouldHaveType(PushCommand::class);
     }
 
     public function it_extends_symfony_command()
@@ -44,10 +40,8 @@ class PushToCommandSpec extends ObjectBehavior
         InputInterface $input,
         OutputInterface $output,
         OutputFormatter $outputFormatter,
-        RemoteStorage $storage
+        Storage $storage
     ) {
-        $input->getArgument('storage')->willReturn('test');
-
         $storage->push($outputFormatter)->shouldBeCalled();
 
         $this->run($input, $output);

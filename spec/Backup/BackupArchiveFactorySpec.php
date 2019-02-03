@@ -8,7 +8,7 @@ use Nanbando\Backup\BackupArchiveInterface;
 use Nanbando\Backup\DifferentialBackupArchive;
 use Nanbando\File\MetadataFactory;
 use Nanbando\Storage\ArchiveInfo;
-use Nanbando\Storage\LocalStorage;
+use Nanbando\Storage\Storage;
 use PhpSpec\Exception\Example\FailureException;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -17,9 +17,9 @@ class BackupArchiveFactorySpec extends ObjectBehavior
 {
     public function let(
         MetadataFactory $metadataFactory,
-        LocalStorage $localStorage
+        Storage $storage
     ) {
-        $this->beConstructedWith($metadataFactory, $localStorage);
+        $this->beConstructedWith($metadataFactory, $storage);
     }
 
     public function it_is_initializable()
@@ -35,11 +35,11 @@ class BackupArchiveFactorySpec extends ObjectBehavior
     }
 
     public function it_should_return_differential_backup_archive(
-        LocalStorage $localStorage,
+        Storage $storage,
         ArchiveInfo $archiveInfo,
         ParameterBagInterface $parameterBag
     ) {
-        $localStorage->get('20180422-113200')->willReturn($archiveInfo)->shouldBeCalled();
+        $storage->get('20180422-113200')->willReturn($archiveInfo)->shouldBeCalled();
         $archiveInfo->openDatabase()->willReturn($parameterBag)->shouldBeCalled();
         $parameterBag->get('mode')->willReturn(BackupArchiveInterface::BACKUP_MODE_FULL);
 
@@ -50,11 +50,11 @@ class BackupArchiveFactorySpec extends ObjectBehavior
     }
 
     public function it_should_throw_an_exception_for_wrong_parent_mode(
-        LocalStorage $localStorage,
+        Storage $storage,
         ArchiveInfo $archiveInfo,
         ParameterBagInterface $parameterBag
     ) {
-        $localStorage->get('20180422-113200')->willReturn($archiveInfo)->shouldBeCalled();
+        $storage->get('20180422-113200')->willReturn($archiveInfo)->shouldBeCalled();
         $archiveInfo->openDatabase()->willReturn($parameterBag)->shouldBeCalled();
         $parameterBag->get('mode')->willReturn(BackupArchiveInterface::BACKUP_MODE_DIFFERENTIAL);
 

@@ -14,8 +14,8 @@ Feature: Upload backup archive
         And the backup-archive "20180422-151000" exists
 
     Scenario: The files should be uploaded when running the "fetch-from" command
-        When I run "bin/nanbando fetch-from test"
-        Then I should see "Fetch from "test" started", "Fetch finished"
+        When I run "bin/nanbando fetch 20180422-145100"
+        Then I should see "Fetch backup "20180422-145100" started", "Fetched backup "20180422-145100", "Fetch finished"
         And The file "var/backups/20180422-145100.tar.gz" should exists
         And The file "var/backups/20180422-145100.json" should exists
         And The file "var/backups/20180422-151000.tar.gz" should exists

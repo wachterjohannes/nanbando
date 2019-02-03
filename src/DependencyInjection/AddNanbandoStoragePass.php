@@ -2,7 +2,7 @@
 
 namespace Nanbando\DependencyInjection;
 
-use Nanbando\Storage\StorageRegistry;
+use Nanbando\Storage\Storage;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -18,7 +18,7 @@ class AddNanbandoStoragePass implements CompilerPassInterface
             }
         }
 
-        $definition = $container->findDefinition(StorageRegistry::class);
-        $definition->replaceArgument(0, $references);
+        $definition = $container->findDefinition(Storage::class);
+        $definition->replaceArgument(1, $references);
     }
 }

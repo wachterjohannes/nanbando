@@ -2,25 +2,27 @@
 
 namespace spec\Nanbando\Restore;
 
+use Nanbando\Console\OutputFormatter;
 use Nanbando\Restore\RestoreArchiveInterface;
 use Nanbando\Restore\RestoreReader;
 use Nanbando\Storage\ArchiveInfo;
-use Nanbando\Storage\LocalStorage;
+use Nanbando\Storage\Storage;
 use Nanbando\Tar\TarFactory;
 use PhpSpec\ObjectBehavior;
 use splitbrain\PHPArchive\Tar;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Filesystem\Filesystem;
-use VirtualFileSystem\Loader;
 use Webmozart\Assert\Assert;
 
 class RestoreReaderSpec extends ObjectBehavior
 {
     public function let(
-        LocalStorage $localStorage,
+        Storage $storage,
         TarFactory $factory,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        OutputFormatter $output
     ) {
-        $this->beConstructedWith($localStorage, $factory, $filesystem);
+        $this->beConstructedWith($storage, $factory, $filesystem, $output);
     }
 
     public function it_is_initializable()
@@ -29,22 +31,16 @@ class RestoreReaderSpec extends ObjectBehavior
     }
 
     public function it_should_open_the_archive(
-        LocalStorage $localStorage,
+        Storage $storage,
         TarFactory $factory,
         ArchiveInfo $archiveInfo,
         Tar $tar
     ) {
-        $l = new Loader();
-        $l->register();
-
-        $fs = new \VirtualFileSystem\FileSystem();
-        file_put_contents($fs->path('20180419-164300.json'), json_encode(['attribute1' => 'value1']));
-
-        $localStorage->get('20180419-164300')->willReturn($archiveInfo);
+        $storage->get('20180419-164300')->willReturn($archiveInfo);
 
         $archiveInfo->isFetched()->willReturn(true);
-        $archiveInfo->getArchivePath()->willReturn($fs->path('20180419-164300.tar.gz'));
-        $archiveInfo->getDatabasePath()->willReturn($fs->path('20180419-164300.json'));
+        $archiveInfo->openDatabase()->willReturn(new ParameterBag(['attribute1' => 'value1']));
+        $archiveInfo->getArchivePath()->willReturn('/tmp/20180419-164300.tar.gz');
 
         $factory->create()->willReturn($tar);
 

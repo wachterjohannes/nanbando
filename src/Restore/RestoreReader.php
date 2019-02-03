@@ -3,17 +3,17 @@
 namespace Nanbando\Restore;
 
 use Nanbando\Backup\BackupArchiveInterface;
-use Nanbando\Storage\LocalStorage;
+use Nanbando\Console\OutputFormatter;
+use Nanbando\Storage\Storage;
 use Nanbando\Tar\TarFactory;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Filesystem\Filesystem;
 
 class RestoreReader
 {
     /**
-     * @var LocalStorage
+     * @var Storage
      */
-    private $localStorage;
+    private $storage;
 
     /**
      * @var TarFactory
@@ -25,22 +25,28 @@ class RestoreReader
      */
     private $filesystem;
 
-    public function __construct(LocalStorage $localStorage, TarFactory $factory, Filesystem $filesystem)
+    /**
+     * @var OutputFormatter
+     */
+    private $output;
+
+    public function __construct(Storage $storage, TarFactory $factory, Filesystem $filesystem, OutputFormatter $output)
     {
-        $this->localStorage = $localStorage;
+        $this->storage = $storage;
         $this->factory = $factory;
         $this->filesystem = $filesystem;
+        $this->output = $output;
     }
 
     public function open(string $name): RestoreArchiveInterface
     {
-        $archive = $this->localStorage->get($name);
+        $archive = $this->storage->get($name);
         if (!$archive->isFetched()) {
-            throw new \RuntimeException('Archive "' . $name . '" does not exists in local storage.');
+            $this->output->section()->subHeadline('Fetch %s', $name);
+            $archive = $this->storage->fetch($name, $this->output);
         }
 
-        $database = new ParameterBag(json_decode(file_get_contents($archive->getDatabasePath()), true));
-
+        $database = $archive->openDatabase();
         $restoreArchive = new RestoreArchive(
             $archive->getArchivePath(),
             $this->factory->create(),

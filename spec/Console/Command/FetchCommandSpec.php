@@ -2,27 +2,23 @@
 
 namespace spec\Nanbando\Console\Command;
 
-use Nanbando\Console\Command\FetchFromCommand;
+use Nanbando\Console\Command\FetchCommand;
 use Nanbando\Console\OutputFormatter;
-use Nanbando\Storage\RemoteStorage;
-use Nanbando\Storage\StorageRegistry;
+use Nanbando\Storage\Storage;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FetchFromCommandSpec extends ObjectBehavior
+class FetchCommandSpec extends ObjectBehavior
 {
     public function let(
-        StorageRegistry $registry,
+        Storage $storage,
         OutputFormatter $outputFormatter,
-        RemoteStorage $storage,
         InputInterface $input
     ) {
-        $this->beConstructedWith($registry, $outputFormatter);
-
-        $registry->get('test')->willReturn($storage);
+        $this->beConstructedWith($storage, $outputFormatter);
 
         $input->bind(Argument::cetera())->willReturn(null);
         $input->isInteractive()->willReturn(null);
@@ -32,7 +28,7 @@ class FetchFromCommandSpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType(FetchFromCommand::class);
+        $this->shouldHaveType(FetchCommand::class);
     }
 
     public function it_extends_symfony_command()
@@ -43,12 +39,12 @@ class FetchFromCommandSpec extends ObjectBehavior
     public function it_should_upload_not_existing_files(
         InputInterface $input,
         OutputInterface $output,
-        RemoteStorage $storage,
+        Storage $storage,
         OutputFormatter $outputFormatter
     ) {
-        $input->getArgument('storage')->willReturn('test');
+        $input->getArgument('name')->willReturn('20190101-173700');
 
-        $storage->fetch($outputFormatter)->shouldBeCalled();
+        $storage->fetch('20190101-173700', $outputFormatter)->shouldBeCalled();
 
         $this->run($input, $output);
     }

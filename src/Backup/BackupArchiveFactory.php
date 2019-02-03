@@ -3,7 +3,7 @@
 namespace Nanbando\Backup;
 
 use Nanbando\File\MetadataFactory;
-use Nanbando\Storage\LocalStorage;
+use Nanbando\Storage\Storage;
 
 class BackupArchiveFactory
 {
@@ -13,14 +13,14 @@ class BackupArchiveFactory
     private $metadataFactory;
 
     /**
-     * @var LocalStorage
+     * @var Storage
      */
-    private $localStorage;
+    private $storage;
 
-    public function __construct(MetadataFactory $metadataFactory, LocalStorage $localStorage)
+    public function __construct(MetadataFactory $metadataFactory, Storage $storage)
     {
         $this->metadataFactory = $metadataFactory;
-        $this->localStorage = $localStorage;
+        $this->storage = $storage;
     }
 
     public function create(): BackupArchiveInterface
@@ -35,10 +35,10 @@ class BackupArchiveFactory
 
     public function createDifferential(string $parent): BackupArchiveInterface
     {
-        $parentInfo = $this->localStorage->get($parent);
+        $parentInfo = $this->storage->get($parent);
         $parentDatabase = $parentInfo->openDatabase();
         if (BackupArchiveInterface::BACKUP_MODE_FULL !== $parentDatabase->get('mode')) {
-            throw new \RuntimeException('Parent for diffenrential backup has to be a full backup.');
+            throw new \RuntimeException('Parent for differential backup has to be a full backup.');
         }
 
         $backupArchive = new DifferentialBackupArchive($parentDatabase, $this->metadataFactory, $this->create());

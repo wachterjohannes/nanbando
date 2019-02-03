@@ -80,8 +80,9 @@ class DataFixturesContext implements Context
 
     /**
      * @Given /^the backup\-archive "([^"]*)" exists with following files$/
+     * @Given /^the backup\-archive "([^"]*)" exists with following files in the folder "([^"]*)"$/
      */
-    public function theBackupArchiveExistsWithFollowingFiles(string $archiveName, TableNode $table)
+    public function theBackupArchiveExistsWithFollowingFiles(string $archiveName, TableNode $table, ?string $directory = null)
     {
         $this->theBackupArchiveExists($archiveName);
 
@@ -99,6 +100,18 @@ class DataFixturesContext implements Context
 
         foreach ($table as $row) {
             $this->filesystem->remove(Path::join($this->fileContext->getWorkingDirectory(), $row['name']));
+        }
+
+        if ($directory) {
+            $this->filesystem->mkdir(Path::join($this->fileContext->getWorkingDirectory(), $directory));
+            $this->filesystem->rename(
+                Path::join($this->fileContext->getBackupDirectory(), $archiveName . '.tar.gz'),
+                Path::join($this->fileContext->getWorkingDirectory(), $directory, $archiveName . '.tar.gz')
+            );
+            $this->filesystem->rename(
+                Path::join($this->fileContext->getBackupDirectory(), $archiveName . '.json'),
+                Path::join($this->fileContext->getWorkingDirectory(), $directory, $archiveName . '.json')
+            );
         }
     }
 

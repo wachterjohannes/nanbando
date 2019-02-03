@@ -39,43 +39,32 @@ class RemoteStorageSpec extends ObjectBehavior
         $this->shouldHaveType(RemoteStorage::class);
     }
 
-    public function it_should_push_not_existing_files(
-        OutputFormatter $outputFormatter,
-        LocalStorage $localStorage,
+    public function it_should_push_files(
         StorageAdapterInterface $storageAdapter,
-        ArchiveInfo $info1,
-        ArchiveInfo $info2
+        ArchiveInfo $info
     ) {
-        $localStorage->listFiles()->willReturn([$info1, $info2]);
-
-        $storageAdapter->exists('20180415-204900')->willReturn(false);
-        $storageAdapter->exists('20180415-205000')->willReturn(true);
+        $info->getArchivePath()->willReturn('/tmp/20180415-205000.tar.gz');
+        $info->getDatabasePath()->willReturn('/tmp/20180415-205000.json');
 
         $storageAdapter->push('/tmp/20180415-205000.tar.gz')->shouldBeCalled();
         $storageAdapter->push('/tmp/20180415-205000.json')->shouldBeCalled();
 
-        $this->push($outputFormatter);
+        $this->push($info);
     }
 
-    public function it_should_fetch_not_existing_files(
-        OutputFormatter $outputFormatter,
-        LocalStorage $localStorage,
+    public function it_should_fetch_files(
         StorageAdapterInterface $storageAdapter,
-        ArchiveInfo $info1,
-        ArchiveInfo $info2
+        ArchiveInfo $info
     ) {
-        $storageAdapter->listFiles()->willReturn(['20180415-204900', '20180415-205000']);
-
-        $localStorage->get('20180415-204900')->willReturn($info1);
-        $localStorage->get('20180415-205000')->willReturn($info2);
-
-        $info1->isFetched()->willReturn(false);
-        $info2->isFetched()->willReturn(true);
+        $info->getArchivePath()->willReturn('/tmp/20180415-205000.tar.gz');
+        $info->getArchiveName()->willReturn('20180415-205000.tar.gz');
+        $info->getDatabasePath()->willReturn('/tmp/20180415-205000.json');
+        $info->getDatabaseName()->willReturn('20180415-205000.json');
 
         $storageAdapter->fetch('20180415-205000.tar.gz', '/tmp/20180415-205000.tar.gz')->shouldBeCalled();
         $storageAdapter->fetch('20180415-205000.json', '/tmp/20180415-205000.json')->shouldBeCalled();
 
-        $this->fetch($outputFormatter);
+        $this->fetch($info);
     }
 
     public function it_should_return_a_list_of_files(
@@ -114,5 +103,16 @@ class RemoteStorageSpec extends ObjectBehavior
         $info->getArchivePath()->willReturn('/tmp/20180415-205000.tar.gz');
 
         $this->fetchArchive($info);
+    }
+
+    public function it_exists(
+        StorageAdapterInterface $storageAdapter,
+        ArchiveInfo $info
+    ) {
+        $storageAdapter->exists('/tmp/20180415-205000.tar.gz')->shouldBeCalled();
+
+        $info->getArchivePath()->willReturn('/tmp/20180415-205000.tar.gz');
+
+        $this->exists($info);
     }
 }

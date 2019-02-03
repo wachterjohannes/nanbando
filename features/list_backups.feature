@@ -13,17 +13,7 @@ Feature: Run list:backups command
         But the backup-archive "20180422-145100" exists in the folder "var/storage/test"
         And the backup-archive "20180422-151000" exists
 
-    Scenario: The local storage should be used by default
+    Scenario: All backups should be listed
         When I run "bin/nanbando list:backups"
         Then I should see "20180422-151000"
-        And I should not see "20180422-145100"
-
-    Scenario: The file of local storage should be displayed
-        When I run "bin/nanbando list:backup local"
-        Then I should see "20180422-151000"
-        And I should not see "20180422-145100"
-
-    Scenario: The file of remote storage should be displayed
-        When I run "bin/nanbando list:backup test"
-        Then I should see "20180422-145100"
-        And I should not see "20180422-151000"
+        And I should see "20180422-145100"

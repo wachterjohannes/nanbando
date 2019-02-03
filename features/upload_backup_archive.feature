@@ -8,15 +8,21 @@ Feature: Upload backup archive
         Given the resources directory is clean
         And there exists following "backup.php" file
           """
-            storage('test', \Nanbando\Storage\DirectoryStorageAdapter::create(get('%cwd%/var/storage/test')));
+            storage('test1', \Nanbando\Storage\DirectoryStorageAdapter::create(get('%cwd%/var/storage/test1')));
+            storage('test2', \Nanbando\Storage\DirectoryStorageAdapter::create(get('%cwd%/var/storage/test2')));
           """
         But the backup-archive "20180422-145100" exists
-        And the backup-archive "20180422-151000" exists in the folder "var/storage/test"
+        And the backup-archive "20180422-151000" exists in the folder "var/storage/test1"
+        And the backup-archive "20180422-151000" exists in the folder "var/storage/test2"
 
-    Scenario: The files should be uploaded when running the "push-to" command
-        When I run "bin/nanbando push-to test"
-        Then I should see "Push to "test" started", "Push finished"
-        And The file "var/storage/test/20180422-145100.tar.gz" should exists
-        And The file "var/storage/test/20180422-145100.json" should exists
-        And The file "var/storage/test/20180422-151000.tar.gz" should exists
-        And The file "var/storage/test/20180422-151000.json" should exists
+    Scenario: The files should be uploaded when running the "push" command
+        When I run "bin/nanbando push"
+        Then I should see "Push started", "Pushed backup "20180422-145100", "Push finished"
+        And The file "var/storage/test1/20180422-145100.tar.gz" should exists
+        And The file "var/storage/test1/20180422-145100.json" should exists
+        And The file "var/storage/test1/20180422-151000.tar.gz" should exists
+        And The file "var/storage/test1/20180422-151000.json" should exists
+        And The file "var/storage/test2/20180422-145100.tar.gz" should exists
+        And The file "var/storage/test2/20180422-145100.json" should exists
+        And The file "var/storage/test2/20180422-151000.tar.gz" should exists
+        And The file "var/storage/test2/20180422-151000.json" should exists

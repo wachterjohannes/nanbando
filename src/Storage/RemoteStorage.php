@@ -2,8 +2,6 @@
 
 namespace Nanbando\Storage;
 
-use Nanbando\Console\OutputFormatter;
-
 class RemoteStorage
 {
     /**
@@ -22,29 +20,10 @@ class RemoteStorage
         $this->adapter = $adapter;
     }
 
-    public function push(OutputFormatter $output): void
+    public function fetch(ArchiveInfo $archiveInfo): void
     {
-        foreach ($this->localStorage->listFiles() as $archiveInfo) {
-            if (!$this->adapter->exists($archiveInfo->getName())) {
-                $this->adapter->push($archiveInfo->getArchivePath());
-                $this->adapter->push($archiveInfo->getDatabasePath());
-            }
-
-            $output->section()->checkmark($archiveInfo->getName());
-        }
-    }
-
-    public function fetch(OutputFormatter $output): void
-    {
-        foreach ($this->adapter->listFiles() as $name) {
-            $archiveInfo = $this->localStorage->get($name);
-            if (!$archiveInfo->isFetched()) {
-                $this->fetchArchive($archiveInfo);
-                $this->fetchDatabase($archiveInfo);
-            }
-
-            $output->section()->checkmark($archiveInfo->getName());
-        }
+        $this->fetchDatabase($archiveInfo);
+        $this->fetchArchive($archiveInfo);
     }
 
     public function fetchDatabase(ArchiveInfo $archiveInfo): void
@@ -55,6 +34,17 @@ class RemoteStorage
     public function fetchArchive(ArchiveInfo $archiveInfo): void
     {
         $this->adapter->fetch($archiveInfo->getArchiveName(), $archiveInfo->getArchivePath());
+    }
+
+    public function exists(ArchiveInfo $archive)
+    {
+        return $this->adapter->exists($archive->getArchivePath());
+    }
+
+    public function push(ArchiveInfo $archiveInfo): void
+    {
+        $this->adapter->push($archiveInfo->getArchivePath());
+        $this->adapter->push($archiveInfo->getDatabasePath());
     }
 
     /**

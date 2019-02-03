@@ -4,77 +4,47 @@ namespace Nanbando\Console\Command;
 
 use Nanbando\Console\OutputFormatter;
 use Nanbando\Storage\ArchiveInfo;
-use Nanbando\Storage\LocalStorage;
-use Nanbando\Storage\StorageRegistry;
+use Nanbando\Storage\Storage;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ListCommand extends Command
 {
     /**
-     * @var LocalStorage
+     * @var Storage
      */
-    private $localStorage;
-
-    /**
-     * @var StorageRegistry
-     */
-    private $registry;
+    private $storage;
 
     /**
      * @var OutputFormatter
      */
     private $output;
 
-    public function __construct(LocalStorage $localStorage, StorageRegistry $registry, OutputFormatter $output)
+    public function __construct(Storage $storage, OutputFormatter $output)
     {
         parent::__construct();
 
-        $this->localStorage = $localStorage;
-        $this->registry = $registry;
+        $this->storage = $storage;
         $this->output = $output;
-    }
-
-    protected function configure()
-    {
-        $this->addArgument('storage', InputArgument::OPTIONAL, '', 'local');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var string $storageName */
-        $storageName = $input->getArgument('storage');
-        $this->output->headline('List backups from %s', $storageName);
+        $this->output->headline('List backups');
 
-        $files = $this->listFiles($storageName);
+        $files = $this->storage->listFiles();
         foreach ($files as $file) {
             $this->output->subHeadline('%s:', $file->getName());
 
-            $this->output->list($this->formatFile($file, $storageName));
+            $this->output->list($this->formatFile($file));
         }
     }
 
-    /**
-     * @return ArchiveInfo[]
-     */
-    protected function listFiles(string $storageName): array
-    {
-        if ('local' === $storageName) {
-            return $this->localStorage->listFiles();
-        }
-
-        $storage = $this->registry->get($storageName);
-
-        return $storage->listFiles();
-    }
-
-    protected function formatFile(ArchiveInfo $file, string $storageName): array
+    protected function formatFile(ArchiveInfo $file): array
     {
         if (!$file->isFetched()) {
-            $storage = $this->registry->get($storageName);
-            $storage->fetchDatabase($file);
+            $this->storage->fetchDatabase($file);
         }
 
         $database = $file->openDatabase();

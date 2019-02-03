@@ -3,45 +3,45 @@
 namespace Nanbando\Console\Command;
 
 use Nanbando\Console\OutputFormatter;
-use Nanbando\Storage\StorageRegistry;
+use Nanbando\Storage\Storage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FetchFromCommand extends Command
+class FetchCommand extends Command
 {
     /**
-     * @var StorageRegistry
+     * @var Storage
      */
-    private $registry;
+    private $storage;
 
     /**
      * @var OutputFormatter
      */
     private $output;
 
-    public function __construct(StorageRegistry $registry, OutputFormatter $output)
+    public function __construct(Storage $storage, OutputFormatter $output)
     {
         parent::__construct();
 
-        $this->registry = $registry;
+        $this->storage = $storage;
         $this->output = $output;
     }
 
     protected function configure()
     {
-        $this->addArgument('storage', InputArgument::REQUIRED);
+        $this->addArgument('name', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output->headline('Fetch from %s started', $input->getArgument('storage'));
+        /** @var string $name */
+        $name = $input->getArgument('name');
 
-        /** @var string $storageName */
-        $storageName = $input->getArgument('storage');
-        $storage = $this->registry->get($storageName);
-        $storage->fetch($this->output);
+        $this->output->headline('Fetch backup %s started', $name);
+
+        $this->storage->fetch($name, $this->output);
 
         $this->output->info('Fetch finished');
     }

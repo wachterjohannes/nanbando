@@ -3,6 +3,7 @@
 namespace spec\Nanbando\Console\Command;
 
 use Nanbando\Console\Command\RestoreCommand;
+use Nanbando\Console\OutputFormatter;
 use Nanbando\Restore\RestoreArchiveInterface;
 use Nanbando\Restore\RestoreReader;
 use Nanbando\Restore\RestoreRunner;
@@ -17,9 +18,10 @@ class RestoreCommandSpec extends ObjectBehavior
     public function let(
         RestoreRunner $restoreRunner,
         RestoreReader $restoreReader,
+        OutputFormatter $output,
         InputInterface $input
     ) {
-        $this->beConstructedWith($restoreRunner, $restoreReader);
+        $this->beConstructedWith($restoreRunner, $restoreReader, $output);
 
         $input->bind(Argument::cetera())->willReturn(null);
         $input->isInteractive()->willReturn(null);
