@@ -1,0 +1,15 @@
+.idea
+.circleci
+coverage
+features
+spec
+tests
+vendor
+.php_cs
+.scrutinizer.yml
+backup.php
+behat.yml.dist
+composer.lock
+coverage.xml
+*.iml
+phpspec.yml.dist
