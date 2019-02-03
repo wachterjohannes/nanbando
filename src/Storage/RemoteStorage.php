@@ -39,12 +39,22 @@ class RemoteStorage
         foreach ($this->adapter->listFiles() as $name) {
             $archiveInfo = $this->localStorage->get($name);
             if (!$archiveInfo->isFetched()) {
-                $this->adapter->fetch($archiveInfo->getArchiveName(), $archiveInfo->getArchivePath());
-                $this->adapter->fetch($archiveInfo->getDatabaseName(), $archiveInfo->getDatabasePath());
+                $this->fetchArchive($archiveInfo);
+                $this->fetchDatabase($archiveInfo);
             }
 
             $output->section()->checkmark($archiveInfo->getName());
         }
+    }
+
+    public function fetchDatabase(ArchiveInfo $archiveInfo): void
+    {
+        $this->adapter->fetch($archiveInfo->getDatabaseName(), $archiveInfo->getDatabasePath());
+    }
+
+    public function fetchArchive(ArchiveInfo $archiveInfo): void
+    {
+        $this->adapter->fetch($archiveInfo->getArchiveName(), $archiveInfo->getArchivePath());
     }
 
     /**

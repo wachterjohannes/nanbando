@@ -46,6 +46,16 @@ class ConsoleContext implements Context
     }
 
     /**
+     * @Then /^I should not see "(.*)"$/
+     */
+    public function iShouldNotSee(string $arguments): void
+    {
+        foreach (explode('", "', $arguments) as $item) {
+            Assert::notContains($this->process->getOutput(), $item);
+        }
+    }
+
+    /**
      * @Given /^I should see following parameters$/
      */
     public function iShouldSeeFollowingParameters(TableNode $table)

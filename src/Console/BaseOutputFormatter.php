@@ -41,6 +41,14 @@ abstract class BaseOutputFormatter
         $this->output->writeln('');
     }
 
+    public function subHeadline(string $format, ...$arguments)
+    {
+        $line = sprintf($format, ...$this->formatValues($arguments));
+
+        $this->output->writeln($line);
+        $this->output->writeln('');
+    }
+
     public function warning(string $format, ...$arguments): void
     {
         $line = sprintf('<warning>' . $format . '</warning>', ...$this->formatValues($arguments));

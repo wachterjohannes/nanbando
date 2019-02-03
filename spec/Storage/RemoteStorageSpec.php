@@ -91,4 +91,28 @@ class RemoteStorageSpec extends ObjectBehavior
 
         $this->listFiles()->shouldBe([$info1, $info2]);
     }
+
+    public function it_should_fetch_database(
+        StorageAdapterInterface $storageAdapter,
+        ArchiveInfo $info
+    ) {
+        $storageAdapter->fetch('20180415-205000.json', '/tmp/20180415-205000.json')->shouldBeCalled();
+
+        $info->getDatabaseName()->willReturn('20180415-205000.json');
+        $info->getDatabasePath()->willReturn('/tmp/20180415-205000.json');
+
+        $this->fetchDatabase($info);
+    }
+
+    public function it_should_fetch_archive(
+        StorageAdapterInterface $storageAdapter,
+        ArchiveInfo $info
+    ) {
+        $storageAdapter->fetch('20180415-205000.tar.gz', '/tmp/20180415-205000.tar.gz')->shouldBeCalled();
+
+        $info->getArchiveName()->willReturn('20180415-205000.tar.gz');
+        $info->getArchivePath()->willReturn('/tmp/20180415-205000.tar.gz');
+
+        $this->fetchArchive($info);
+    }
 }

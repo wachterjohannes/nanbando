@@ -7,7 +7,8 @@ isCommand() {
     "restore" \
     "push-to" \
     "fetch-from" \
-    "init"
+    "init" \
+    "list:backups"
   do
     if [ -z "${cmd#"$1"}" ]; then
       return 0
