@@ -58,6 +58,7 @@ class DirectoryStorageInitializer implements InitializerInterface
 
         return <<<EOF
 storage('$name', \Nanbando\Storage\DirectoryStorageAdapter::create(get('%cwd%/$directory')));
+
 EOF;
     }
 }

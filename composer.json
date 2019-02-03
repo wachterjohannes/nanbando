@@ -32,7 +32,10 @@
     "autoload": {
         "psr-4": {
             "Nanbando\\": "src/"
-        }
+        },
+        "files": [
+            "recipes/common.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

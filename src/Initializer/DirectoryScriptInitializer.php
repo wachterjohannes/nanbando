@@ -58,6 +58,7 @@ class DirectoryScriptInitializer implements InitializerInterface
 
         return <<<EOF
 attach('$name', \Nanbando\Script\DirectoryScript::create(get('%cwd%/$directory')));
+
 EOF;
     }
 }

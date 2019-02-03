@@ -23,6 +23,7 @@ $container->addCompilerPass(new AddNanbandoInitializerPass());
 $container->addCompilerPass(new SetServicesPass());
 
 $container->setParameter('cwd', getcwd());
+$container->setParameter('local', getcwd() . '/var/backups');
 
 $locator = new FileLocator(__DIR__ . '/../config');
 $loader = new XmlFileLoader($container, $locator);

@@ -69,8 +69,6 @@ class InitCommand extends Command
 
 namespace Nanbando;
 
-require_once __DIR__ . '/vendor/nanbando/nanbando/recipes/common.php';
-
 
 EOF;
 
@@ -78,9 +76,11 @@ EOF;
         $section->info('Define your backup scripts');
 
         $content .= $this->determineScripts($input, $output);
+        if ($content) {
+            $content .= PHP_EOL;
+        }
 
         $output->writeln('');
-        $content .= PHP_EOL . PHP_EOL;
 
         $content .= $this->determineStorages($input, $output);
 

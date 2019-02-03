@@ -20,7 +20,7 @@ class DirectoryScriptInitializerSpec extends ObjectBehavior
     public function it_should_return_correct_template()
     {
         $this->getTemplate(['name' => 'test', 'directory' => 'test-directory'])->shouldEqual(
-            "attach('test', \Nanbando\Script\DirectoryScript::create(get('%cwd%/test-directory')));"
+            "attach('test', \Nanbando\Script\DirectoryScript::create(get('%cwd%/test-directory')));\n"
         );
     }
 }
