@@ -36,7 +36,9 @@ class RestoreCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $restoreArchive = $this->restoreReader->open($input->getArgument('file'));
+        /** @var string $file */
+        $file = $input->getArgument('file');
+        $restoreArchive = $this->restoreReader->open($file);
 
         $this->restoreRunner->run($restoreArchive);
     }

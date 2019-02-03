@@ -38,7 +38,9 @@ class FetchFromCommand extends Command
     {
         $this->output->headline('Fetch from %s started', $input->getArgument('storage'));
 
-        $storage = $this->registry->get($input->getArgument('storage'));
+        /** @var string $storageName */
+        $storageName = $input->getArgument('storage');
+        $storage = $this->registry->get($storageName);
         $storage->fetch($this->output);
 
         $this->output->info('Fetch finished');

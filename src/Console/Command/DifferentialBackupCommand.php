@@ -39,7 +39,9 @@ class DifferentialBackupCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $backupArchive = $this->factory->createDifferential($input->getArgument('parent'));
+        /** @var string $parent */
+        $parent = $input->getArgument('parent');
+        $backupArchive = $this->factory->createDifferential($parent);
 
         $backupArchive->set('label', $input->getArgument('label'));
         $backupArchive->set('message', $input->getOption('message'));

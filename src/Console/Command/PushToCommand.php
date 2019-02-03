@@ -38,7 +38,9 @@ class PushToCommand extends Command
     {
         $this->output->headline('Push to %s started', $input->getArgument('storage'));
 
-        $storage = $this->registry->get($input->getArgument('storage'));
+        /** @var string $storageName */
+        $storageName = $input->getArgument('storage');
+        $storage = $this->registry->get($storageName);
         $storage->push($this->output);
 
         $this->output->info('Push finished');
